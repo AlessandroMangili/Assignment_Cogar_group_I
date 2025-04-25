@@ -1,0 +1,5 @@
+Behavioural diagram
+====================
+
+Explanation
+--------------

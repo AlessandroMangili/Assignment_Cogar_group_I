@@ -1,24 +1,25 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cogar Assignments documentation &mdash; Cogar_Assignments  documentation</title>
+  <title>Cogar assignment group I &mdash; Cogar assignment 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Component diagram" href="component.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -30,7 +31,7 @@
           
           
           <a href="#" class="icon icon-home">
-            Cogar_Assignments
+            Cogar assignment
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -40,21 +41,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Cogar Assignments documentation</a><ul>
-<li><a class="reference internal" href="#repository-structure">Repository Structure</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="behavioural.html">Behevioural</a></li>
+<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing and KPIs</a></li>
 </ul>
-</li>
-</ul>
-</div>
+
         </div>
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Cogar_Assignments</a>
+          <a href="#">Cogar assignment</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -62,9 +63,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Cogar Assignments documentation</li>
+      <li class="breadcrumb-item active">Cogar assignment group I</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/AleBulanti/Assignment_Cogar/blob/main/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/AlessandroMangili/Assignment_Cogar_group_I/blob/main/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -72,67 +73,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cogar-assignments-documentation">
-<h1>Cogar Assignments documentation<a class="headerlink" href="#cogar-assignments-documentation" title="Permalink to this heading"></a></h1>
-<p>This repository contains the code for the <cite>Assignment_Cogar</cite> project.</p>
-<section id="repository-structure">
-<h2>Repository Structure<a class="headerlink" href="#repository-structure" title="Permalink to this heading"></a></h2>
-<ul>
-<li><p><strong>src/</strong></p>
-<p>Contains the <cite>assignments</cite> ROS package, which includes Python service nodes.
-All services are presented together, but they are organized by assignments as follows:</p>
-<ul class="simple">
-<li><p><strong>Topic 1 Services:</strong>
-- <cite>speaker_service.py</cite></p></li>
-<li><p><strong>Topic 2 Services:</strong>
-- <cite>arm_motion_service.py</cite>
-- <cite>speaker_service.py</cite></p></li>
-<li><p><strong>Topic 3 Services:</strong>
-- <cite>arm_motion_service.py</cite></p></li>
-</ul>
-</li>
-<li><p><strong>srv/</strong></p>
-<p>Contains all custom ROS service definitions, categorized per topics:</p>
-<ul class="simple">
-<li><p><strong>Topic 1 .srv:</strong>
-- <cite>Speaker.srv</cite></p></li>
-<li><p><strong>Topic 2 .srv:</strong>
-- <cite>Speaker.srv</cite>
-- <cite>CheckJointState.srv</cite></p></li>
-<li><p><strong>Topic 3 .srv:</strong>
-- <cite>CheckJointState.srv</cite></p></li>
-</ul>
-</li>
-<li><p><strong>docs/</strong></p>
-<p>Includes documentation materials and reference content used to write this documentation.</p>
-</li>
-<li><p><strong>TIAGo .bag</strong></p>
-<p>Below are the data collected in bags from the TIAGo sensors, which can be found on OneDrive.
-Each bag represents inputs captured from one specific sensor, including:</p>
-<ul class="simple">
-<li><p>RGB-D Camera: Depth raw images, RGB raw images.</p></li>
-<li><p>LiDAR: Environment point cloud.</p></li>
-<li><p>SONAR: Distance measurements.</p></li>
-<li><p>Force Sensors: Force and Torque measurementsof the right arm.</p></li>
-<li><p>Odometry: Provides the robot’s current position and velocity.</p></li>
-<li><p>Arm Joint State: Includes information about the robot’s limb, such as positions, velocities, and effort.</p></li>
-</ul>
-</li>
-</ul>
+  <section id="cogar-assignment-group-i">
+<h1>Cogar assignment group I<a class="headerlink" href="#cogar-assignment-group-i" title="Link to this heading"></a></h1>
+<p>This is the first assignment of the cogar course.</p>
 <div class="toctree-wrapper compound">
 </div>
-</section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="component.html" class="btn btn-neutral float-right" title="Component diagram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, ABulanti.</p>
+    <p>&#169; Copyright 2025, Alessandro Mangili, Marco Lovecchio and Talha Rebbouh.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

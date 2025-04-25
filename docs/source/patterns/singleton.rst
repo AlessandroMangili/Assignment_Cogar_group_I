@@ -1,0 +1,6 @@
+Singleton
+------------
+
+In a robot, multiple components may need to send commands to the motor. If each component creates its own separate instance of a motor controller, it can lead to conflicts and unpredictable movements. To avoid this, we can use the Singleton pattern for each motor controller both for the wheels and the gripper ensuring that only one instance of each exists. 
+Similarly, the speaker should also be implemented as a singleton, since we only need a single instance to handle all audio outputs. Also the robot’s state should be a singleton as well, as there must be only one centralized state representation at any given time. The recipe component should also be implemented as a singleton, since the robot can cook only one recipe at a time, and therefore there must be only a single instance of the object. 
+The Wi-Fi connection manager component must also be implemented as a singleton, since there should be only one object responsible for making internet requests to search for recipes or proposals.
