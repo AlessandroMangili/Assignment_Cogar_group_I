@@ -59,6 +59,7 @@ add_service_files(
   FILES
   CheckJointState.srv
   Speaker.srv
+  WheelsSpeed.srv
 )
 
 ## Generate actions in the 'action' folder
