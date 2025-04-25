@@ -3,6 +3,9 @@ import rospy
 from assignments.srv import WheelsSpeed, WheelsSpeedResponse
 import random
 
+max_wheel_speed = 10.0
+min_wheel_speed = -10.0
+
 def set_wheels_speed(req):
     """
     Service callback that set the speeds provided to the wheels.
@@ -16,8 +19,8 @@ def set_wheels_speed(req):
         return WheelsSpeedResponse(False)
 
     # Check if the dimensions of positions, velocities, and efforts match the expected joint count
-    if (req.left_speed >= -10 or req.left_speed  <= 10)  and \
-       (req.right_speed >= -10 or req.right_speed  <= 10):
+    if (req.left_speed >= -min_wheel_speed or req.left_speed  <= max_wheel_speed)  and \
+       (req.right_speed >= -min_wheel_speed or req.right_speed  <= max_wheel_speed):
         rospy.loginfo("Speeds have been setted to the wheels.")
         rospy.sleep(5)
         rospy.loginfo("The robot moved!")
@@ -32,7 +35,7 @@ def wheels_speed_service():
     """
     rospy.init_node('wheels_speed_service', anonymous=True)
     # Create the service that listens for requests
-    service = rospy.Service('/wheels_speed_service', WheelsSpeed, set_wheels_speed)
+    service = rospy.Service('/set_wheels_speed', WheelsSpeed, set_wheels_speed)
     rospy.loginfo("Wheels speed service is ready!")
     rospy.spin()
 
