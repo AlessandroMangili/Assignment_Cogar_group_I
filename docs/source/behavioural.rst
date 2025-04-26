@@ -121,7 +121,7 @@ VERBAL COMMAND → during the execution of the recipe, verbal command can be giv
 - NO → emit a "No Valid Command Messagge" signal to the "Speaker" component (the message "Sorry, I can't" is reproduced) and stop the cycle.
 - YES → emit a "Valid Command Message" signal to the "Speaker" component (the message "OK" is reproduced) and a "Command Recipe History" signal to the namesake component, then stop the cycle.
 
-The Robot State is updated by the "High Level Action" component, so when the Recipe is updated and the first action of the recipe starts.
+The Robot State is updated by the "High Level Action" component, so when "Recipe" is updated and the first action of the recipe starts, the Robot State will not be anymore in "No Recipe" State.
 
 Recipe Tracking and Execution History
 -------------------------------------
