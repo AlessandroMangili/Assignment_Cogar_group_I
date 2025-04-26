@@ -13,6 +13,4 @@ Patterns
 
 .. include:: patterns/strategy.rst
 
-
-
 .. include:: patterns/state.rst
