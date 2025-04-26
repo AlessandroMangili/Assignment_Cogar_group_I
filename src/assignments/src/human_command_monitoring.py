@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+import rospy
+from std_msgs.msg import String
+from assignments.msg import RobotState
+from assignments.srv import Speaker
+
+class HumanCommandMonitoring:
+    def __init__(self):
+        rospy.init_node('human_command_monitoring', anonymous=True)
+        
+        self.robot_state_pub = rospy.Publisher('/robot_state', RobotState, queue_size=10)
+        self.recipe_notification_pub = rospy.Publisher('/recipe_found', String, queue_size=10)
+        
+        rospy.Subscriber('/microphone_input', String, self.audio_callback)
+        rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
+        
+        rospy.wait_for_service('/speaker')
+        self.speaker_client = rospy.ServiceProxy('/speaker', Speaker)
+        
+        self.robot_state = RobotState()
+        self.robot_state.state = "No Recipe"
+        
+        rospy.loginfo("Human Command Monitoring initialized")
+    
+    def speak(self, message):
+        try:
+            response = self.speaker_client(message)
+            if not response.success:
+                rospy.logwarn("Speaker service failed to reproduce the message")
+                rospy.sleep(1)
+                retry_response = self.speaker_client(message)
+                if not retry_response.success:
+                    rospy.logerr("Speaker service failed again")
+            return response.success
+        except rospy.ServiceException as e:
+            rospy.logerr(f"Service call failed: {e}")
+            return False
+    
+    def audio_callback(self, msg):
+        rospy.loginfo(f"Received audio: {msg.data}")
+        
+        if len(msg.data) < 5:
+            self.speak("Please repeat")
+            return
+            
+        if self.robot_state.state == "No Recipe":
+            if "recipe" in msg.data.lower():
+                recipe_name = msg.data.lower().replace("recipe", "").strip()
+                rospy.loginfo(f"Recipe requested: {recipe_name}")
+                
+                if self.simulate_wifi_connection():
+                    result = self.search_recipe(recipe_name)
+                    if result:
+                        self.speak(f"OK, let's start the recipe {recipe_name}")
+                        self.recipe_notification_pub.publish(recipe_name)
+                    else:
+                        self.speak("Recipe not found")
+                else:
+                    self.speak("Please connect to Wi-Fi")
+            elif "ingredients" in msg.data.lower():
+                ingredients = msg.data.lower().replace("ingredients", "").strip().split()
+                rospy.loginfo(f"Ingredients mentioned: {ingredients}")
+                
+                if self.simulate_wifi_connection():
+                    recipes = self.propose_recipes(ingredients)
+                    if recipes:
+                        self.speak(f"I found these recipes: {', '.join(recipes)}")
+                    else:
+                        self.speak("No proposes found with these ingredients")
+                else:
+                    self.speak("Please connect to Wi-Fi")
+        else:
+            self.validate_command(msg.data)
+    
+    def object_tracking_callback(self, msg):
+        rospy.loginfo(f"Object tracking: {msg.data}")
+        
+        if "ingredient" in msg.data.lower() and self.robot_state.state == "No Recipe":
+            ingredients = msg.data.lower().split("ingredient:")[1].strip().split()
+            rospy.loginfo(f"Ingredients seen: {ingredients}")
+            
+            if self.simulate_wifi_connection():
+                recipes = self.propose_recipes(ingredients)
+                if recipes:
+                    self.speak(f"I see you have {', '.join(ingredients)}. I found these recipes: {', '.join(recipes)}")
+                else:
+                    self.speak("No proposes found with these ingredients")
+            else:
+                self.speak("Please connect to Wi-Fi")
+    
+    def search_recipe(self, recipe_name):
+        rospy.loginfo(f"Searching for recipe: {recipe_name}")
+        rospy.sleep(2)
+        
+        if recipe_name == "impossible":
+            return False
+        
+        return True
+    
+    def validate_command(self, command):
+        rospy.loginfo(f"Validating command: {command}")
+        
+        if "invalid" in command.lower():
+            self.speak("Sorry, I can't do that")
+            return False
+        
+        self.speak("OK")
+        return True
+    
+    def propose_recipes(self, ingredients):
+        rospy.loginfo(f"Finding recipes with: {ingredients}")
+        rospy.sleep(2)
+        
+        if not ingredients:
+            return []
+        
+        return ["Pasta", "Salad", "Soup"]
+    
+    def simulate_wifi_connection(self):
+        import random
+        return random.random() < 0.9
+
+if __name__ == '__main__':
+    try:
+        node = HumanCommandMonitoring()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
