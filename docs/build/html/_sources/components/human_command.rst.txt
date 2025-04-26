@@ -6,3 +6,6 @@ Human command monitoring and conflict resolution
    :align: center
    :width: 100%
    :height: 800px
+   :target: #
+
+.. rubric:: Implementation through patterns

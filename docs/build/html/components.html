@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Components diagram &mdash; Cogar assignment 1.0.0 documentation</title>
+  <title>Components Diagram &mdash; Cogar assignment 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Recipe tracking and execution history" href="components/recipe_tracking.html" />
-    <link rel="prev" title="Cogar assignment group I" href="index.html" /> 
+    <link rel="prev" title="COGAR ASSIGNMENT - TOPIC 3" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,22 +42,22 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Indices:</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Components</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="components/recipe_tracking.html">Recipe tracking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="components/action_planning.html">Action planning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/human_command.html">Humman command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/human_command.html">Human command</a></li>
 <li class="toctree-l2"><a class="reference internal" href="components/planner.html">Planner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/perception.html">Perception</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/motion.html">Motion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/navigation.html">Navigation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/gripper.html">Gripper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/error_handler.html">Error handler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="components/speaker.html">Speaker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/error_handler.html">Error handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/gripper.html">Gripper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/navigation.html">Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/motion.html">Motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/perception.html">Perception</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="behavioural.html">Behevioural</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing and KPIs</a></li>
 </ul>
@@ -76,9 +76,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Components diagram</li>
+      <li class="breadcrumb-item active">Components Diagram</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/AlessandroMangili/Assignment_Cogar_group_I/blob/documentation/docs/source/components.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/AlessandroMangili/Assignment_Cogar_group_I/blob/main/docs/source/components.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -87,22 +87,23 @@
            <div itemprop="articleBody">
              
   <section id="components-diagram">
-<h1>Components diagram<a class="headerlink" href="#components-diagram" title="Link to this heading"></a></h1>
+<h1>Components Diagram<a class="headerlink" href="#components-diagram" title="Link to this heading"></a></h1>
+<p>This page provides an overview of the software architecture, detailing each major component and its purpose within the TIAGo-based meal preparation system.</p>
 <a class="reference internal image-reference" href="_images/component.png"><img alt="Components diagram" class="align-center" src="_images/component.png" style="width: 100%; height: 576px;" />
 </a>
-<p>Let’s see now each module of this diagram:</p>
+<p>Let’s now take a brief look at each component to better understand their application, and analyze which design patterns could be adopted to achieve the best implementation for each of them.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="components/recipe_tracking.html">Recipe tracking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="components/action_planning.html">Action planning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="components/human_command.html">Humman command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components/human_command.html">Human command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="components/planner.html">Planner</a></li>
-<li class="toctree-l1"><a class="reference internal" href="components/perception.html">Perception</a></li>
-<li class="toctree-l1"><a class="reference internal" href="components/motion.html">Motion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="components/navigation.html">Navigation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="components/gripper.html">Gripper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="components/error_handler.html">Error handler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="components/speaker.html">Speaker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components/error_handler.html">Error handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components/gripper.html">Gripper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components/navigation.html">Navigation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components/motion.html">Motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components/perception.html">Perception</a></li>
 </ul>
 </div>
 </section>
@@ -111,7 +112,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Cogar assignment group I" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="COGAR ASSIGNMENT - TOPIC 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="components/recipe_tracking.html" class="btn btn-neutral float-right" title="Recipe tracking and execution history" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

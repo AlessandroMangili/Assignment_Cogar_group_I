@@ -33,6 +33,6 @@ html_context = {
     "display_github": True,
     "github_user": "AlessandroMangili",
     "github_repo": "Assignment_Cogar_group_I",
-    "github_version": "documentation",
+    "github_version": "main",
     "conf_py_path": "/docs/source/",
 }

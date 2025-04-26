@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cogar assignment group I &mdash; Cogar assignment 1.0.0 documentation</title>
+  <title>COGAR ASSIGNMENT - TOPIC 3 &mdash; Cogar assignment 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Components diagram" href="components.html" /> 
+    <link rel="next" title="Components Diagram" href="components.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,10 +41,10 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <p class="caption" role="heading"><span class="caption-text">Indices:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
 <li class="toctree-l1"><a class="reference internal" href="behavioural.html">Behevioural</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing and KPIs</a></li>
 </ul>
@@ -63,9 +63,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Cogar assignment group I</li>
+      <li class="breadcrumb-item active">COGAR ASSIGNMENT - TOPIC 3</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/AlessandroMangili/Assignment_Cogar_group_I/blob/documentation/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/AlessandroMangili/Assignment_Cogar_group_I/blob/main/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -73,32 +73,63 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cogar-assignment-group-i">
-<h1>Cogar assignment group I<a class="headerlink" href="#cogar-assignment-group-i" title="Link to this heading"></a></h1>
-<p>This is the first assignment of the cogar course.</p>
+  <section id="cogar-assignment-topic-3">
+<h1>COGAR ASSIGNMENT - TOPIC 3<a class="headerlink" href="#cogar-assignment-topic-3" title="Link to this heading"></a></h1>
+<section id="assisting-elderly-individuals-in-meal-preparation">
+<h2>Assisting elderly individuals in meal preparation<a class="headerlink" href="#assisting-elderly-individuals-in-meal-preparation" title="Link to this heading"></a></h2>
+<p><strong>Platform:</strong> TIAGo robot deployed in a kitchen environment to assist elderly people with cooking tasks. The robot system is equipped with:</p>
+<ul class="simple">
+<li><p>RGB-D Camera</p></li>
+<li><p>LiDAR</p></li>
+<li><p>SONAR</p></li>
+<li><p>Force Sensors</p></li>
+<li><p>Microphones</p></li>
+<li><p>Speakers</p></li>
+</ul>
+<p><strong>Scope of Work:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Ingredient retrieval</strong>
+- Plan and execute efficient, obstacle-free paths using vision and real-time mapping to fetch ingredients.</p></li>
+<li><p><strong>Collaborative cooking process</strong>
+- Follow recipe steps (mixing, cutting, pouring), maintain an internal representation of progress, and update dynamically.</p></li>
+<li><p><strong>Action decision-making</strong>
+- Determine next actions based on task history and current state; verify and interpret verbal commands.</p></li>
+<li><p><strong>Verbal command handling</strong>
+- Resolve conflicts between user instructions and planned sequence by deciding to override or reject.</p></li>
+<li><p><strong>Object recognition</strong>
+- Identify and locate tools and ingredients in the workspace.</p></li>
+<li><p><strong>Mission completion</strong>
+- Confirm completion of all recipe steps and notify the user when the meal is ready.</p></li>
+</ol>
+</section>
+<section id="mandatory-components">
+<h2>Mandatory Components<a class="headerlink" href="#mandatory-components" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Recipe tracking and execution history</strong>
+Maintains a dynamic model of the recipe sequence and logs all performed actions.</p></li>
+<li><p><strong>Action planning based on cooking state and task history</strong>
+Chooses the next best action by analyzing current progress and past steps, adapting to unexpected conditions.</p></li>
+<li><p><strong>Human command monitoring and conflict resolution</strong>
+Interprets user verbal commands, validates or rejects them against the planned workflow, and updates the plan accordingly.</p></li>
+</ul>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Indices:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="components.html">Components</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="components/recipe_tracking.html">Recipe tracking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="components/action_planning.html">Action planning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/human_command.html">Humman command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/human_command.html">Human command</a></li>
 <li class="toctree-l2"><a class="reference internal" href="components/planner.html">Planner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/perception.html">Perception</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/motion.html">Motion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/navigation.html">Navigation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/gripper.html">Gripper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components/error_handler.html">Error handler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="components/speaker.html">Speaker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/error_handler.html">Error handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/gripper.html">Gripper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/navigation.html">Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/motion.html">Motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components/perception.html">Perception</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="behavioural.html">Behevioural</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="behavioural.html#objects">Objects</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="behavioural.html#recipe">Recipe</a></li>
-<li class="toctree-l3"><a class="reference internal" href="behavioural.html#recipe-history">Recipe History</a></li>
-<li class="toctree-l3"><a class="reference internal" href="behavioural.html#new-recipe-history">New Recipe History</a></li>
-<li class="toctree-l3"><a class="reference internal" href="behavioural.html#on-execution-actions">On Execution Actions</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="behavioural.html#objects">Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="behavioural.html#communication-channels">Communication Channels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="behavioural.html#system-initialization">System Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="behavioural.html#human-command-monitoring-and-conflict-resolution">Human Command Monitoring and Conflict Resolution</a></li>
@@ -106,27 +137,18 @@
 <li class="toctree-l2"><a class="reference internal" href="behavioural.html#action-planning-based-on-cooking-state-and-task-history">Action Planning Based on Cooking State and Task History</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="patterns.html">Patterns</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="patterns.html#singleton">Singleton</a></li>
-<li class="toctree-l2"><a class="reference internal" href="patterns.html#adapter">Adapter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="patterns.html#command">Command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="patterns.html#mediator">Mediator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="patterns.html#observer">Observer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="patterns.html#strategy">Strategy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="patterns.html#state">State</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing and KPIs</a></li>
 </ul>
 </div>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="components.html" class="btn btn-neutral float-right" title="Components diagram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="components.html" class="btn btn-neutral float-right" title="Components Diagram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

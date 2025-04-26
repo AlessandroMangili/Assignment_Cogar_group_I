@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Behavioural diagram" href="../behavioural.html" />
-    <link rel="prev" title="Error handler" href="error_handler.html" /> 
+    <link rel="next" title="Error handler" href="error_handler.html" />
+    <link rel="prev" title="Planner high level" href="planner.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,22 +42,22 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../component.html">Component</a><ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Indices:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../components.html">Components</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="recipe_tracking.html">Recipe tracking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="action_planning.html">Action planning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="human_command.html">Humman command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="human_command.html">Human command</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planner.html">Planner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="perception.html">Perception</a></li>
-<li class="toctree-l2"><a class="reference internal" href="motion.html">Motion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="navigation.html">Navigation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gripper.html">Gripper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="error_handler.html">Error handler</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Speaker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_handler.html">Error handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gripper.html">Gripper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navigation.html">Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="motion.html">Motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perception.html">Perception</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../behavioural.html">Behevioural</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../patterns.html">Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../interfaces.html">Interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../testing.html">Testing and KPIs</a></li>
 </ul>
@@ -76,10 +76,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../component.html">Component diagram</a></li>
+          <li class="breadcrumb-item"><a href="../components.html">Components Diagram</a></li>
       <li class="breadcrumb-item active">Speaker</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/AlessandroMangili/Assignment_Cogar_group_I/blob/documentation/docs/source/components/speaker.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/AlessandroMangili/Assignment_Cogar_group_I/blob/main/docs/source/components/speaker.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -89,16 +89,22 @@
              
   <section id="speaker">
 <h1>Speaker<a class="headerlink" href="#speaker" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="../_images/speaker.png"><img alt="Speaker component" class="align-center" src="../_images/speaker.png" style="width: 100%; height: 450px;" />
+<a class="reference external image-reference" href="#"><img alt="Speaker component" class="align-center" src="../_images/speaker.png" style="width: 100%; height: 450px;" />
 </a>
+<div class="line-block">
+<div class="line">The <strong>speaker</strong> component manages verbal communication between the robot and nearby people through speakers. It receives messages from the various connected components and vocally reproduces them using its internal module.</div>
+<div class="line">As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</div>
+</div>
+<p class="rubric">Implementation through patterns</p>
+<p>The <strong>speaker</strong> component must be implemented using the <strong>singleton</strong> pattern since the robot has only one audio output device. Multiple instances of the speaker class would create conflicts in accessing the shared hardware resource, as different system components might attempt to use the single physical speaker simultaneously.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="error_handler.html" class="btn btn-neutral float-left" title="Error handler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../behavioural.html" class="btn btn-neutral float-right" title="Behavioural diagram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="planner.html" class="btn btn-neutral float-left" title="Planner high level" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="error_handler.html" class="btn btn-neutral float-right" title="Error handler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
