@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import rospy
+import random
 from std_msgs.msg import String
 from assignments.msg import RobotState
 from assignments.srv import Speaker
@@ -8,10 +9,10 @@ class HumanCommandMonitoring:
     def __init__(self):
         rospy.init_node('human_command_monitoring', anonymous=True)
         
-        self.robot_state_pub = rospy.Publisher('/robot_state', RobotState, queue_size=10)
-        self.recipe_notification_pub = rospy.Publisher('/update_recipe', String, queue_size=10)
+        self.update_recipe_pub = rospy.Publisher('/update_recipe', String, queue_size=10)
         self.command_pub = rospy.Publisher('/command_recipe_history', String, queue_size=10)
         
+        rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
         rospy.Subscriber('/microphone_input', String, self.audio_callback)
         rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
         
@@ -19,9 +20,11 @@ class HumanCommandMonitoring:
         self.speaker_client = rospy.ServiceProxy('/speaker', Speaker)
         
         self.robot_state = RobotState()
-        self.robot_state.state = "No Recipe"
         
         rospy.loginfo("Human Command Monitoring initialized")
+    
+    def robot_state_callback(self, msg):
+        self.robot_state.state = msg
     
     def speak(self, message):
         try:
@@ -53,7 +56,7 @@ class HumanCommandMonitoring:
                     result = self.search_recipe(recipe_name)
                     if result:
                         self.speak(f"OK, let's start the recipe {recipe_name}")
-                        self.recipe_notification_pub.publish(recipe_name)
+                        self.update_recipe_pub.publish(recipe_name)
                     else:
                         self.speak("Recipe not found")
                 else:
@@ -119,7 +122,6 @@ class HumanCommandMonitoring:
         return ["Pasta", "Salad", "Soup"]
     
     def simulate_wifi_connection(self):
-        import random
         return random.random() < 0.9
 
 if __name__ == '__main__':

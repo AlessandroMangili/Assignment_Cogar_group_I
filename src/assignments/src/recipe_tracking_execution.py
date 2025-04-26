@@ -2,7 +2,7 @@
 import rospy
 import random
 from std_msgs.msg import String, Bool
-from assignments.msg import Acrion, Recipe, RecipeHistory, NewRecipeHistory, OnExecutionActions
+from assignments.msg import Action, Recipe, RecipeHistory, NewRecipeHistory, OnExecutionActions
 
 class RecipeTrackingExecution:
     def __init__(self):
@@ -19,7 +19,7 @@ class RecipeTrackingExecution:
         rospy.Subscriber('/update_recipe', String, self.update_recipe)
         rospy.Subscriber('/initialize_recipe_history', Bool, self.initialize_recipe_history)
         rospy.Subscriber('/update_recipe_history', Bool, self.update_recipe_history)
-        rospy.Subscriber('/update_on_execution_actions', String, self.update_on_execution_actions)
+        rospy.Subscriber('/update_on_execution_actions', Action, self.update_on_execution_actions)
         rospy.Subscriber('/command_recipe_history', String, self.command_recipe_history)
         
         self.recipe = Recipe()
@@ -88,28 +88,28 @@ class RecipeTrackingExecution:
 	rospy.loginfo("Updating recipe history based on on_execution_actions")
 
 	if not self.on_execution_actions.actions:
-		rospy.logwarn("No actions in execution to update.")
-		return False
+	    rospy.logwarn("No actions in execution to update.")
+	    return False
 
 	current_action_label = self.on_execution_actions.actions[0].label
 	action_idx = -1
 
 	for idx, action in enumerate(self.recipe_history.actions):
-		if action.label == current_action_label:
-		    action_idx = idx
-		    break
+	    if action.label == current_action_label:
+		action_idx = idx
+		break
 
 	if action_idx == -1:
-    		rospy.logwarn(f"Action '{current_action_label}' not found in recipe history. Adding it directly.")
+    	    rospy.logwarn(f"Action '{current_action_label}' not found in recipe history. Adding it directly.")
 
-    		self.recipe_history.actions.append(self.on_execution_actions.actions[0])
-    		self.recipe_history.executed.append(False)
-    		self.recipe_history.execution_order.append(sum(1 for executed in self.recipe_history.executed if executed))
+    	    self.recipe_history.actions.append(self.on_execution_actions.actions[0])
+    	    self.recipe_history.executed.append(False)
+    	    self.recipe_history.execution_order.append(sum(1 for executed in self.recipe_history.executed if executed))
 
-    		self.recipe_history_pub.publish(self.recipe_history)
+    	    self.recipe_history_pub.publish(self.recipe_history)
 
-    		rospy.loginfo(f"Action '{current_action_label}' added in recipe_history.")
-    		return True
+    	    rospy.loginfo(f"Action '{current_action_label}' added in recipe_history.")
+    	    return True
 
 	self.recipe_history.executed[action_idx] = True
 	self.recipe_history.execution_order[action_idx] = sum(1 for executed in self.recipe_history.executed if executed)
@@ -144,7 +144,7 @@ class RecipeTrackingExecution:
 	self.on_execution_actions_pub.publish(self.on_execution_actions)
 	self.update_recipe_history_pub.publish(Bool(data=True))
 
-	rospy.loginfo(f"Now executing action: {found_action['label']}")
+	rospy.loginfo(f"Now executing action: {found_action.label}")
 	return True
     
     def command_recipe_history(self, req):
@@ -160,13 +160,13 @@ class RecipeTrackingExecution:
         if "add" in req.data.lower():
             new_action = Action()
             new_action.label = f"NewAction{random.randint(100, 999)}"
-            new_action.order = max([action.order for action in self.new_recipe_history.actions]) + 1
+            new_action.order = min([action.order for action in self.new_recipe_history.actions]) - 1
             new_action.mandatory = random.choice([True, False])
             new_action.prerequisites = random.sample(range(1, new_action.order), k=random.randint(0, min(2, new_action.order-1)))
             new_action.tools = random.sample(range(1, 11), k=random.randint(1, 2))
             new_action.ingredients = random.sample(range(1, 21), k=random.randint(1, 3))
             
-            self.new_recipe_history.actions.append(action)
+            self.new_recipe_history.actions.append(new_action)
             self.new_recipe_history.executed.append(False)
             self.new_recipe_history.execution_order.append(0)
             self.new_recipe_history.new_actions.append(True)
