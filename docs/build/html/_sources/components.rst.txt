@@ -4,7 +4,7 @@ Components Diagram
 
 This page provides an overview of the software architecture, detailing each major component and its purpose within the TIAGo-based meal preparation system.
 
-.. image:: _static/component.png
+.. image:: _static/components.png
    :alt: Components diagram
    :align: center
    :width: 100%

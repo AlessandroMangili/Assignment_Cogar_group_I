@@ -2,20 +2,19 @@ Behavioural diagram
 ====================
 
 .. image:: _static/behavioural1-2.png
-   :alt: Component diagram
+   :alt: Behavioural diagram 1 and 2
    :align: center
    :width: 100%
    :height: 576px
    
 .. image:: _static/behavioural3.png
-   :alt: Component diagram
+   :alt: Behavioural diagram 3
    :align: center
    :width: 100%
    :height: 1476px
 
 Objects
 -------
-
 
 This components use 4 different objects:
 

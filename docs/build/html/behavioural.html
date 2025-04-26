@@ -90,9 +90,9 @@
              
   <section id="behavioural-diagram">
 <h1>Behavioural diagram<a class="headerlink" href="#behavioural-diagram" title="Link to this heading"></a></h1>
-<a class="reference internal image-reference" href="_images/behavioural1-2.png"><img alt="Component diagram" class="align-center" src="_images/behavioural1-2.png" style="width: 100%; height: 576px;" />
+<a class="reference internal image-reference" href="_images/behavioural1-2.png"><img alt="Behavioural diagram 1 and 2" class="align-center" src="_images/behavioural1-2.png" style="width: 100%; height: 576px;" />
 </a>
-<a class="reference internal image-reference" href="_images/behavioural3.png"><img alt="Component diagram" class="align-center" src="_images/behavioural3.png" style="width: 100%; height: 1476px;" />
+<a class="reference internal image-reference" href="_images/behavioural3.png"><img alt="Behavioural diagram 3" class="align-center" src="_images/behavioural3.png" style="width: 100%; height: 1476px;" />
 </a>
 <section id="objects">
 <h2>Objects<a class="headerlink" href="#objects" title="Link to this heading"></a></h2>
@@ -112,7 +112,7 @@
 </section>
 <section id="recipe-history">
 <h3>Recipe History<a class="headerlink" href="#recipe-history" title="Link to this heading"></a></h3>
-<p>Recipe History : List of executed actions. It inherits from the “Recipe” object its size  and the order of the actions, and adds:</p>
+<p>Recipe History : List of executed actions. It inherits everything from the “Recipe” object, and adds:</p>
 <ul class="simple">
 <li><p>a boolean indicating whether the action has been executed (used by the “Command Validation” and “Unexpected Condition Check” components) and</p></li>
 <li><p>an integer that indicates the order of execution (used by the “Update On Execution Actions” component);</p></li>
@@ -124,7 +124,7 @@
 </section>
 <section id="on-execution-actions">
 <h3>On Execution Actions<a class="headerlink" href="#on-execution-actions" title="Link to this heading"></a></h3>
-<p>On Execution Actions : List of actions currently being executed. It inherits from the “Recipe” object its size and the order actions, and adds:</p>
+<p>On Execution Actions : List of actions currently being executed. It inherits everything from the “Recipe” object, and adds:</p>
 <ul class="simple">
 <li><p>a boolean to highlights if the action is in execution (used by the “Command Validation” and “Unexpected Condition Check” components),</p></li>
 <li><p>an integer that indicates the time of execution remained (used by the “Command Validation” and “Unexpected Condition Check” components) and</p></li>
@@ -204,7 +204,7 @@ It evaluates if isConnected?</p>
 <li><p>NO → emit a “No Valid Command Messagge” signal to the “Speaker” component (the message “Sorry, I can’t” is reproduced) and stop the cycle.</p></li>
 <li><p>YES → emit a “Valid Command Message” signal to the “Speaker” component (the message “OK” is reproduced) and a “Command Recipe History” signal to the namesake component, then stop the cycle.</p></li>
 </ul>
-<p>The Robot State is updated by the “High Level Action” component, so when the Recipe is updated and the first action of the recipe starts.</p>
+<p>The Robot State is updated by the “High Level Action” component, so when “Recipe” is updated and the first action of the recipe starts, the Robot State will not be anymore in “No Recipe” State.</p>
 </section>
 <section id="recipe-tracking-and-execution-history">
 <h2>Recipe Tracking and Execution History<a class="headerlink" href="#recipe-tracking-and-execution-history" title="Link to this heading"></a></h2>
