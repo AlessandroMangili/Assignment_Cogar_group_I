@@ -91,12 +91,10 @@
 <h1>Gripper<a class="headerlink" href="#gripper" title="Link to this heading"></a></h1>
 <a class="reference external image-reference" href="#"><img alt="Gripper component" class="align-center" src="../_images/gripper.png" style="width: 100%; height: 576px;" />
 </a>
-<div class="line-block">
-<div class="line">The <strong>gripper</strong> component manages the end part of the robotic arm. It includes the components necessary for movement, namely the <strong>encoder</strong>, <strong>controller</strong>, and <strong>motor</strong>, along with a <strong>force sensor</strong> connected to the controller.</div>
-<div class="line">This component uses the <a class="reference internal" href="perception.html"><span class="doc">Perception</span></a> module to track the movement of the object and monitor its position within the gripper.</div>
-<div class="line">Actions are issued to the controller through the <a class="reference internal" href="planner.html"><span class="doc">Planner</span></a> component.</div>
-<div class="line">As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</div>
-</div>
+<p>The <strong>gripper</strong> component manages the end part of the robotic arm. It includes the components necessary for movement, namely the <strong>encoder</strong>, <strong>controller</strong>, and <strong>motor</strong>, along with a <strong>force sensor</strong> connected to the controller.</p>
+<p>This component uses the <a class="reference internal" href="perception.html"><span class="doc">perception</span></a> module to track the movement of the object and monitor its position within the gripper.
+| Actions are issued to the controller through the <strong>trajectory planning</strong> component inside the <a class="reference internal" href="navigation.html"><span class="doc">navigation</span></a>.</p>
+<p>As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</p>
 <p class="rubric">Implementation through patterns</p>
 <p>The <strong>motor controller</strong> is implemented using the <strong>singleton</strong> pattern, as there must be at most one instance per controller; otherwise, consistency issues could arise, since there is only one physical controller.</p>
 <p>Furthermore, to connect the <strong>encoder</strong> to the <strong>controller</strong>, the <strong>adapter</strong> pattern must be used to handle the mismatch between their different data types. Similarly, the <strong>force sensor</strong>, which the controller uses to regulate the gripper’s force, is also integrated using the <strong>adapter</strong> pattern, as it exchanges a different type of data compared to the controller. The use of the adapter allows the controller to properly handle the incoming data.</p>

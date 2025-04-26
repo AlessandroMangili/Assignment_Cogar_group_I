@@ -91,10 +91,8 @@
 <h1>Perception<a class="headerlink" href="#perception" title="Link to this heading"></a></h1>
 <a class="reference external image-reference" href="#"><img alt="Perception component" class="align-center" src="../_images/perception.png" style="width: 400px; height: 500px;" />
 </a>
-<div class="line-block">
-<div class="line">The <strong>perception</strong> component includes a module for the <strong>camera</strong>, which collects visual information from the robot. Through the <strong>object recognition</strong> and <strong>object tracking</strong> components, it analyzes the images to recognize and track objects, exposing these functionalities to various components that require them, such as the <a class="reference internal" href="navigation.html"><span class="doc">Navigation</span></a>.</div>
-<div class="line">As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</div>
-</div>
+<p>The <strong>perception</strong> component includes a module for the <strong>camera</strong>, which collects visual information from the robot. Through the <strong>object recognition</strong> and <strong>object tracking</strong> components, it analyzes the images to recognize and track objects, exposing these functionalities to various components that require them, such as the <a class="reference internal" href="navigation.html"><span class="doc">navigation</span></a>.</p>
+<p>As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</p>
 <p class="rubric">Implementation through patterns</p>
 <p>Similarly, the <strong>camera</strong> component will be implemented using the <strong>singleton</strong> pattern, since, as previously explained, multiple instances of the same component cannot exist: the physical device is unique, and having multiple instances would lead to consistency issues.</p>
 <p>Additionally, in order to communicate with the component responsible for <strong>object recognition</strong>, the <strong>camera</strong> component must use the <strong>adapter</strong> pattern to ensure data consistency during exchanges.</p>

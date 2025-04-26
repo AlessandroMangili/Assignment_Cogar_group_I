@@ -8,10 +8,12 @@ Gripper
    :height: 576px
    :target: #
 
-| The **gripper** component manages the end part of the robotic arm. It includes the components necessary for movement, namely the **encoder**, **controller**, and **motor**, along with a **force sensor** connected to the controller.
-| This component uses the :doc:`Perception<perception>` module to track the movement of the object and monitor its position within the gripper.
-| Actions are issued to the controller through the :doc:`Planner<planner>` component.
-| As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the :doc:`error handler <error_handler>` component, which will manage any recovery procedures.
+The **gripper** component manages the end part of the robotic arm. It includes the components necessary for movement, namely the **encoder**, **controller**, and **motor**, along with a **force sensor** connected to the controller.
+
+This component uses the :doc:`perception<perception>` module to track the movement of the object and monitor its position within the gripper.
+| Actions are issued to the controller through the **trajectory planning** component inside the :doc:`navigation<navigation>`.
+
+As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the :doc:`error handler <error_handler>` component, which will manage any recovery procedures.
 
 .. rubric:: Implementation through patterns
 

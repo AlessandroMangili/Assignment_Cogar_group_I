@@ -91,7 +91,10 @@
 <h1>Action planning based on cooking state and task history<a class="headerlink" href="#action-planning-based-on-cooking-state-and-task-history" title="Link to this heading"></a></h1>
 <a class="reference external image-reference" href="#"><img alt="Action planning component" class="align-center" src="../_images/action_planning.png" style="width: 100%; height: 700px;" />
 </a>
+<p>Da aggiungere qui …..</p>
+<p>As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</p>
 <p class="rubric">Implementation through patterns</p>
+<p>The <strong>update best action</strong> component can be implemented using the <strong>strategy</strong> design pattern. This pattern is a behavioral design pattern that allows selecting an algorithm at runtime. Rather than implementing a single fixed algorithm, the system can choose from a family of predefined strategies based on the context. In our case, depending on the input received by the component, it determines and applies the most appropriate action to execute.</p>
 </section>
 
 

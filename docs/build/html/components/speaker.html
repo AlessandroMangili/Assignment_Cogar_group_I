@@ -91,10 +91,8 @@
 <h1>Speaker<a class="headerlink" href="#speaker" title="Link to this heading"></a></h1>
 <a class="reference external image-reference" href="#"><img alt="Speaker component" class="align-center" src="../_images/speaker.png" style="width: 100%; height: 450px;" />
 </a>
-<div class="line-block">
-<div class="line">The <strong>speaker</strong> component manages verbal communication between the robot and nearby people through speakers. It receives messages from the various connected components and vocally reproduces them using its internal module.</div>
-<div class="line">As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</div>
-</div>
+<p>The <strong>speaker</strong> component manages verbal communication between the robot and nearby people through speakers. It receives messages from the various connected components and vocally reproduces them using its internal module.</p>
+<p>As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the <a class="reference internal" href="error_handler.html"><span class="doc">error handler</span></a> component, which will manage any recovery procedures.</p>
 <p class="rubric">Implementation through patterns</p>
 <p>The <strong>speaker</strong> component must be implemented using the <strong>singleton</strong> pattern since the robot has only one audio output device. Multiple instances of the speaker class would create conflicts in accessing the shared hardware resource, as different system components might attempt to use the single physical speaker simultaneously.</p>
 </section>
