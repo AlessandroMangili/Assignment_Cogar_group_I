@@ -36,7 +36,7 @@ The robot already has an internal representation of all the tools and ingredient
 Recipe History
 ^^^^^^^^^^^^^^
 
-Recipe History : List of executed actions. It inherits from the "Recipe" object its size  and the order of the actions, and adds:
+Recipe History : List of executed actions. It inherits everything from the "Recipe" object, and adds:
 
 - a boolean indicating whether the action has been executed (used by the "Command Validation" and "Unexpected Condition Check" components) and
 - an integer that indicates the order of execution (used by the "Update On Execution Actions" component);
@@ -49,7 +49,7 @@ New Recipe History : List of executed actions with new ones requested by the hum
 On Execution Actions
 ^^^^^^^^^^^^^^^^^^^^
 
-On Execution Actions : List of actions currently being executed. It inherits from the "Recipe" object its size and the order actions, and adds:
+On Execution Actions : List of actions currently being executed. It inherits everything from the "Recipe" object, and adds:
 
 - a boolean to highlights if the action is in execution (used by the "Command Validation" and "Unexpected Condition Check" components),
 - an integer that indicates the time of execution remained (used by the "Command Validation" and "Unexpected Condition Check" components) and
