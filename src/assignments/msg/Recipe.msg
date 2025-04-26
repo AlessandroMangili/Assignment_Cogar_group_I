@@ -1,2 +1,1 @@
-# Structure: {label, order, mandatory, prerequisites[], tools[], ingredients[]}
-dict[] actions
+assignments/Action[] actions

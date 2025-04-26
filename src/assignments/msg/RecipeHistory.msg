@@ -1,3 +1,3 @@
-dict[] actions            # Inherits from Recipe
+assignments/Action[] actions            # Inherits from Recipe
 bool executed
 int32 execution_order

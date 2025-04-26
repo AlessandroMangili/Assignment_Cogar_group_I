@@ -9,7 +9,8 @@ class HumanCommandMonitoring:
         rospy.init_node('human_command_monitoring', anonymous=True)
         
         self.robot_state_pub = rospy.Publisher('/robot_state', RobotState, queue_size=10)
-        self.recipe_notification_pub = rospy.Publisher('/recipe_found', String, queue_size=10)
+        self.recipe_notification_pub = rospy.Publisher('/update_recipe', String, queue_size=10)
+        self.command_pub = rospy.Publisher('/command_recipe_history', String, queue_size=10)
         
         rospy.Subscriber('/microphone_input', String, self.audio_callback)
         rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
@@ -105,6 +106,7 @@ class HumanCommandMonitoring:
             return False
         
         self.speak("OK")
+        self.command_pub.publish(command)
         return True
     
     def propose_recipes(self, ingredients):
