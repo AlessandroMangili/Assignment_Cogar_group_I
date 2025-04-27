@@ -5,16 +5,19 @@ KPIs for Unit Test
 ^^^^^^^^^^^^^^^^^^
 
 HUMAN COMMAND MONITORING AND CONFLICT RESOLUTION:
+
 1. Interpretation accuracy (Percentage of audio inputs correctly interpreted as phrases)
 2. Recipe search accuracy (Percentage of recipes correctly retrieved from the database)
 3. Proposes search accuracy (Percentage of proposes correctly retrieved from the database)
 
-RECIPE TRACKING AND EXECUTION HISTORY
+RECIPE TRACKING AND EXECUTION HISTORY:
+
 1. Data integrity (Consistency between Recipe, Recipe History and On Execution Actions)
 2. Recipe update accuracy (Percentage of recipes correctly updated from the internet)
 3. Dependency validity (Percentage of prerequisites correctly verified)
 
-ACTION PLANNING BASED ON COOKING STATE AND TASK HISTORY
+ACTION PLANNING BASED ON COOKING STATE AND TASK HISTORY:
+
 1. Unexpected condition control precision (Percentage of unexpected conditions correctly detected)
 2. Best action calculation accuracy (Percentage of optimal choices for subsequent actions)
 
