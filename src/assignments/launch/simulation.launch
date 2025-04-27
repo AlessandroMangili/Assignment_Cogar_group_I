@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="assignments" type="speaker_service.py" name="speaker_service" output="screen"/>
+    <node pkg="assignments" type="human_command_monitoring.py" name="human_command_monitoring" output="screen"/>
+    <node pkg="assignments" type="recipe_tracking_execution.py" name="recipe_tracking_execution" output="screen"/>
+    <node pkg="assignments" type="action_planning.py" name="action_planning" output="screen"/>
+</launch>
