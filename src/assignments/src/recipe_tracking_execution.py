@@ -28,7 +28,7 @@ class RecipeTrackingExecution:
         self.new_recipe_history = NewRecipeHistory()
         
         self.dummy_action = Action()
-        self.dummy_action.label = "DummyAction"
+        self.dummy_action.label = "Grabbing"
         self.dummy_action.order = 1
         self.dummy_action.mandatory = True
         self.dummy_action.prerequisites = []
@@ -106,7 +106,7 @@ class RecipeTrackingExecution:
         
         if "add" in req.data.lower():
             new_action = Action()
-            new_action.label = "NewAction"
+            new_action.label = "Cutting"
             new_action.order = len(self.recipe_history.actions) + 1
             new_action.mandatory = random.choice([True, False])
             new_action.prerequisites = random.sample(range(1, new_action.order), k=random.randint(0, min(2, new_action.order-1)))
@@ -124,7 +124,7 @@ class RecipeTrackingExecution:
         return "Recipe history updated with human command"
 
 if __name__ == '__main__':
-    try
+    try:
     	node = RecipeTrackingExecution()
     	rospy.spin()
     except rospy.ROSInterruptException:

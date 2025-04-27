@@ -68,7 +68,7 @@ class ActionPlanning:
         self.robot_state = msg"""
     
     def planning_cycle(self, event):
-        if None in [self.recipe]:
+        if not self.recipe:
             return
         
         is_recipe_failed = self.unexpected_condition_check()
@@ -90,23 +90,22 @@ class ActionPlanning:
     def unexpected_condition_check(self):
         rospy.loginfo("Checking for unexpected conditions")
         
-        if None in [self.object_tracking_data]:
-            return False
-        
-        return random.random() < 0.9
+        return random.random() < 0.1
     
     def update_best_action(self):
         rospy.loginfo("Updating best action")
         self.best_action = None
         
-        if None in [self.recipe_history]:
+        if not self.recipe_history:
             return False
         
-        if self.recipe_history and all(self.recipe_history.executed):
+        if self.recipe_history and isinstance(self.recipe_history.executed, list) and all(self.recipe_history.executed):
             rospy.loginfo("All actions executed")
             return True
+        else:
+            self.best_action = self.recipe_history.actions[0]
         
-        return random.random() < 0.9
+        return random.random() < 0.1
 
 if __name__ == '__main__':
     try:

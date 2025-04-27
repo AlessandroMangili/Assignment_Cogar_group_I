@@ -26,13 +26,17 @@ class HumanCommandMonitoring:
         self.recipe_history = RecipeHistory()
         self.on_execution_actions = OnExecutionActions()"""
         
+        self.possible_recipes = ["pasta carbonara", "insalata greca", "risotto ai funghi", "pizza margherita", "lasagna", "tiramisu", "impossible"]
+        self.possible_ingredients = ["pomodori", "pasta", "riso", "funghi", "mozzarella", "basilico", "uova", "farina", "zucchero", "carne"]
+        self.timer = rospy.Timer(rospy.Duration(10), self.generate_random_input)
+        
         rospy.wait_for_service('/speaker')
         self.speaker_client = rospy.ServiceProxy('/speaker', Speaker)
         
         rospy.loginfo("Human Command Monitoring initialized")
     
     def robot_state_callback(self, msg):
-        self.robot_state.state = msg
+        self.robot_state = msg
         
     """used in the real architecture
     def recipe_callback(self, msg):
@@ -58,6 +62,38 @@ class HumanCommandMonitoring:
             rospy.logerr(f"Service call failed: {e}")
             return False
     
+    def generate_random_input(self, event):
+        input_type = random.choice(["recipe", "ingredients", "command"])
+        
+        if self.robot_state == "No Recipe":
+            if input_type == "recipe":
+            	recipe_name = random.choice(self.possible_recipes)
+            	simulated_input = f"recipe {recipe_name}"
+            	rospy.loginfo(f"Simulated voice input: {simulated_input}")
+            
+            	msg = String()
+            	msg.data = simulated_input
+            	self.audio_callback(msg)
+            
+            elif input_type == "ingredients":
+            	num_ingredients = random.randint(1, 3)
+            	selected_ingredients = random.sample(self.possible_ingredients, num_ingredients)
+            	ingredients_str = " ".join(selected_ingredients)
+            	simulated_input = f"ingredients {ingredients_str}"
+            	rospy.loginfo(f"Simulated voice input: {simulated_input}")
+            
+            	msg = String()
+            	msg.data = simulated_input
+            	self.audio_callback(msg)
+        elif input_type == "command":
+            commands = ["next step", "repeat", "previous step", "pause", "continue", "stop"]
+            command = random.choice(commands)
+            rospy.loginfo(f"Simulated command: {command}")
+            
+            msg = String()
+            msg.data = command
+            self.audio_callback(msg)
+    
     def audio_callback(self, msg):
         rospy.loginfo(f"Received audio: {msg.data}")
         
@@ -65,7 +101,7 @@ class HumanCommandMonitoring:
             self.speak("Please repeat")
             return
             
-        if self.robot_state.state == "No Recipe":
+        if self.robot_state == "No Recipe":
             if "recipe" in msg.data.lower():
                 recipe_name = msg.data.lower().replace("recipe", "").strip()
                 rospy.loginfo(f"Recipe requested: {recipe_name}")
@@ -74,6 +110,7 @@ class HumanCommandMonitoring:
                     result = self.search_recipe(recipe_name)
                     if result:
                         self.speak(f"OK, let's start the recipe {recipe_name}")
+                        self.robot_state = "Recipe"
                         self.update_recipe_pub.publish(recipe_name)
                     else:
                         self.speak("Recipe not found")
@@ -97,7 +134,7 @@ class HumanCommandMonitoring:
     def object_tracking_callback(self, msg):
         rospy.loginfo(f"Object tracking: {msg.data}")
         
-        if "ingredient" in msg.data.lower() and self.robot_state.state == "No Recipe":
+        if "ingredient" in msg.data.lower() and self.robot_state == "No Recipe":
             ingredients = msg.data.lower().split("ingredient:")[1].strip().split()
             rospy.loginfo(f"Ingredients seen: {ingredients}")
             
@@ -139,7 +176,14 @@ class HumanCommandMonitoring:
         if not ingredients:
             return []
         
-        return ["Pasta", "Salad", "Soup"]
+        if "pomodori" in ingredients or "mozzarella" in ingredients:
+            return ["Pizza Margherita", "Insalata Caprese", "Pasta al Pomodoro"]
+        elif "pasta" in ingredients or "uova" in ingredients:
+            return ["Carbonara", "Pasta all'uovo", "Frittata"]
+        elif "riso" in ingredients or "funghi" in ingredients:
+            return ["Risotto ai funghi", "Riso al salto", "Zuppa di funghi"]
+        else:
+            return ["Insalata mista", "Minestrone", "Zuppa"]
     
     def simulate_wifi_connection(self):
         return random.random() < 0.9
