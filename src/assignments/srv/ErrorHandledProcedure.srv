@@ -1,7 +1,0 @@
-
-bool enable      
-float32 duration 
---- 
-
-bool success     
-string message   
