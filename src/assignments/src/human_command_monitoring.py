@@ -145,7 +145,8 @@ class HumanCommandMonitoring:
         return random.random() < 0.9
 
 if __name__ == '__main__':
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
+    try:
         node = HumanCommandMonitoring()
         rospy.spin()
+    except rospy.ROSInterruptException:
+        pass

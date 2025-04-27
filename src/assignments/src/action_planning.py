@@ -81,11 +81,11 @@ class ActionPlanning:
             is_recipe_finished = self.update_best_action()
         
             if is_recipe_finished:
-            	rospy.loginfo("Recipe finished!")
-        	self.speak("Recipe Finished")
+                rospy.loginfo("Recipe finished!")
+                self.speak("Recipe Finished")
             else:
-            	self.update_on_execution_actions_pub.publish(self.best_action)
-            	self.notify_action_pub.publish(self.best_action)
+                self.update_on_execution_actions_pub.publish(self.best_action)
+                self.notify_action_pub.publish(self.best_action)
     
     def unexpected_condition_check(self):
         rospy.loginfo("Checking for unexpected conditions")
@@ -109,7 +109,8 @@ class ActionPlanning:
         return random.random() < 0.9
 
 if __name__ == '__main__':
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
-        node = ActionPlanning()
-        rospy.spin()
+    try:
+    	node = ActionPlanning()
+    	rospy.spin()
+    except rospy.ROSInterruptException:
+        pass

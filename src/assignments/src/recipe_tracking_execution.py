@@ -51,7 +51,7 @@ class RecipeTrackingExecution:
         return True
     
     def initialize_recipe_history(self, req):
-        rospy.loginfo("Updating recipe history")
+        rospy.loginfo("Initializing recipe history")
         
         self.recipe_history.actions = self.recipe.actions
         self.recipe_history.executed = [False] * len(self.recipe_history.actions)
@@ -59,16 +59,16 @@ class RecipeTrackingExecution:
         
         self.recipe_history_pub.publish(self.recipe_history)
         
-        rospy.loginfo("Recipe history updated")
+        rospy.loginfo("Recipe history initialized")
         return True
     
     def update_recipe_history(self, req):
-	rospy.loginfo("Updating recipe history based on on_execution_actions")
+        rospy.loginfo("Updating recipe history based on on_execution_actions")
 
-	is_executed = random.choice([True, False])
+        is_executed = random.choice([True, False])
         
         if is_executed:
-            if hasattr(self, 'recipe_history') and self.recipe_history.executed:
+            if hasattr(self, 'recipe_history') and self.recipe_history.executed is not None:
                 self.recipe_history.executed = [True]
                 self.recipe_history.execution_order = [1]
                 
@@ -79,21 +79,21 @@ class RecipeTrackingExecution:
         else:
             rospy.loginfo("Dummy action not executed (random choice)")
 
-	return True
+        return True
     
     def update_on_execution_actions(self, req):
-	rospy.loginfo(f"Received request to update on execution actions with label: {req.data}")
-
-	self.on_execution_actions.actions = [self.recipe_history.actions]
-        self.on_execution_actions.in_execution = [True] * len(self.on_execution_actions.actions)
-        self.on_execution_actions.time_remaining = [random.randint(1, 10)] * len(self.on_execution_actions.actions)
-        self.on_execution_actions.interruptable = [random.choice([True, False])] * len(self.on_execution_actions.actions)
-
-	self.on_execution_actions_pub.publish(self.on_execution_actions)
-	self.update_recipe_history_pub.publish(Bool(data=True))
-
-	rospy.loginfo(f"Now executing action: {found_action.label}")
-	return True
+        rospy.loginfo(f"Received request to update on execution actions with label: {req.label}")
+        
+        self.on_execution_actions.actions = self.recipe_history.actions
+        self.on_execution_actions.in_execution = [True]
+        self.on_execution_actions.time_remaining = [random.randint(1, 10)]
+        self.on_execution_actions.interruptable = [random.choice([True, False])]
+        
+        self.on_execution_actions_pub.publish(self.on_execution_actions)
+        self.update_recipe_history_pub.publish(Bool(data=True))
+        
+        rospy.loginfo(f"Now executing action: {req.label}")
+        return True
     
     def command_recipe_history(self, req):
         rospy.loginfo(f"Command recipe history: {req.data}")
@@ -102,13 +102,12 @@ class RecipeTrackingExecution:
         self.new_recipe_history.actions = self.recipe_history.actions
         self.new_recipe_history.executed = self.recipe_history.executed
         self.new_recipe_history.execution_order = self.recipe_history.execution_order
-        
         self.new_recipe_history.new_actions = [False] * len(self.recipe_history.actions)
         
         if "add" in req.data.lower():
             new_action = Action()
             new_action.label = "NewAction"
-            new_action.order = 2
+            new_action.order = len(self.recipe_history.actions) + 1
             new_action.mandatory = random.choice([True, False])
             new_action.prerequisites = random.sample(range(1, new_action.order), k=random.randint(0, min(2, new_action.order-1)))
             new_action.tools = random.sample(range(1, 11), k=random.randint(1, 2))
@@ -125,7 +124,8 @@ class RecipeTrackingExecution:
         return "Recipe history updated with human command"
 
 if __name__ == '__main__':
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
-        node = RecipeTrackingExecution()
-        rospy.spin()
+    try
+    	node = RecipeTrackingExecution()
+    	rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
