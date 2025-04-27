@@ -8,7 +8,9 @@ Human command monitoring and conflict resolution
    :height: 800px
    :target: #
 
-Da aggiungere qui .....
+The planner continuously listens for human commands through the "Microphones" component, generating an "Audio Track" variable and evaluating whether an interaction has occurred. If there is no interaction, the cycle stops; if there is, it processes the message through the "Interpreter" component. If the message is not a valid sentence, the system asks the user to repeat it. Once a valid sentence is interpreted, the system checks if it's the first interaction and whether ingredients have been shown. Depending on the input, it either requests a recipe or ingredient list and attempts to connect to Wi-Fi. If Wi-Fi connection fails, it signals an error; if successful, it searches for a recipe or proposes a some recipes based on available ingredients.
+
+During recipe execution, the system can accept verbal commands. It validates these commands and, if valid, updates the recipe history and provides appropriate responses. The robot's state is updated by the "High Level Action" component, ensuring that each step is executed according to the latest recipe information.
 
 As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the :doc:`error handler <error_handler>` component, which will manage any recovery procedures.
 
