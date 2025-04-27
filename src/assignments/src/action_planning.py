@@ -14,21 +14,23 @@ class ActionPlanning:
         
         rospy.Subscriber('/recipe', Recipe, self.recipe_callback)
         rospy.Subscriber('/recipe_history', RecipeHistory, self.recipe_history_callback)
+        self.recipe = Recipe()
+        self.recipe_history = RecipeHistory()
+        
+        """used in the real architecture
         rospy.Subscriber('/on_execution_actions', OnExecutionActions, self.on_execution_actions_callback)
         rospy.Subscriber('/new_recipe_history', NewRecipeHistory, self.new_recipe_history_callback)
         rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
         rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
+        self.best_action = Action()
+        self.robot_state = RobotState()
+        self.on_execution_actions = OnExecutionActions()
+        self.new_recipe_history = NewRecipeHistory()"""
         
         rospy.wait_for_service('/speaker')
         self.speaker_client = rospy.ServiceProxy('/speaker', Speaker)
         
-        self.planning_timer = rospy.Timer(rospy.Duration(0.1), self.planning_cycle)
-        
-        self.best_action = Action()
-        self.robot_state = RobotState()
-        self.recipe = Recipe()
-        self.recipe_history = RecipeHistory()
-        self.on_execution_actions = OnExecutionActions()
+        self.planning_timer = rospy.Timer(rospy.Duration(1), self.planning_cycle)
         
         rospy.loginfo("Action Planning initialized")
     
@@ -52,6 +54,7 @@ class ActionPlanning:
     def recipe_history_callback(self, msg):
         self.recipe_history = msg
     
+    """used in the real architecture
     def on_execution_actions_callback(self, msg):
         self.on_execution_actions = msg
     
@@ -62,7 +65,7 @@ class ActionPlanning:
         self.object_tracking_data = msg.data
     
     def robot_state_callback(self, msg):
-        self.robot_state = msg
+        self.robot_state = msg"""
     
     def planning_cycle(self, event):
         if None in [self.recipe]:
@@ -91,48 +94,6 @@ class ActionPlanning:
             return False
         
         return random.random() < 0.9
-        
-        """if len(self.on_execution_actions.actions) > 0:
-            for idx, current_action in enumerate(self.on_execution_actions.actions):
-                if self.on_execution_actions.in_execution[idx]:
-                    for prereq_order in current_action.prerequisites:
-                        prereq_idx = next((i for i, action in enumerate(self.recipe_history.actions) if action.order == prereq_order), -1)
-                        
-                        if prereq_idx >= 0 and not self.recipe_history.executed[prereq_idx]:
-                            rospy.logwarn(f"Action {current_action.label} (order {current_action.order}) is executing but prerequisite {prereq_order} not met!")
-                            if current_action.mandatory:
-                                return True
-        
-        missing_ingredients = []
-        if "missing" in self.object_tracking_data.lower():
-            parts = self.object_tracking_data.split(":")
-            if len(parts) > 1:
-                missing_ingredients = [item.strip() for item in parts[1].split(",")]
-            
-            rospy.logwarn(f"Missing ingredients detected: {missing_ingredients}")
-            
-            for idx, action in enumerate(self.recipe_history.actions):
-                if not self.recipe_history.executed[idx]:
-                    required_ingredients = [self.get_ingredient_name(ing_id) for ing_id in action.ingredients]
-                    if any(ing in missing_ingredients for ing in required_ingredients):
-                        if action.mandatory:
-                            rospy.logerr(f"Mandatory action {action.label} requires missing ingredients: {missing_ingredients}")
-                            return True
-        
-        for idx, action in enumerate(self.recipe_history.actions):
-            if self.recipe_history.executed[idx]:
-                for prereq_order in action.prerequisites:
-                    prereq_idx = next((i for i, a in enumerate(self.recipe_history.actions) if a.order == prereq_order), -1)
-                    
-                    if prereq_idx >= 0 and not self.recipe_history.executed[prereq_idx]:
-                        rospy.logwarn(f"Human executed action {action.label} without completing prerequisite {prereq_order}")
-                        if action.mandatory:
-                            return True
-        
-        return False
-    
-    def get_ingredient_name(self, ingredient_id):
-        return f"ingredient_{ingredient_id}" """
     
     def update_best_action(self):
         rospy.loginfo("Updating best action")
@@ -145,49 +106,10 @@ class ActionPlanning:
             rospy.loginfo("All actions executed")
             return True
         
-        if self.on_execution_actions and any(self.on_execution_actions.in_execution):
-            for i, in_exec in enumerate(self.on_execution_actions.in_execution):
-                if in_exec:
-                    if self.on_execution_actions.time_remaining[i] > 0:
-                        self.on_execution_actions.time_remaining[i] -= 1
-                    else:
-                        self.on_execution_actions.in_execution[i] = False
-                        rospy.loginfo(f"Action completed: {self.on_execution_actions.actions[i].label}")
-        
-        if self.new_recipe_history and self.new_recipe_history.new_actions:
-            for new_action in self.new_recipe_history.actions:
-                in_history = any(action.order == new_action.order for action in self.recipe_history.actions)
-                in_execution = any(action.order == new_action.order for action in self.on_execution_actions.actions)
-                
-                if not in_history and not in_execution:
-                    rospy.loginfo(f"New action found: {new_action.label} (order: {new_action.order})")
-                    self.best_action = new_action
-                    return False
-        
-        for idx, action in enumerate(self.recipe_history.actions):
-            if not self.recipe_history.executed[idx]:
-                prereqs_met = True
-                for prereq_order in action.prerequisites:
-                    prereq_idx = next((i for i, a in enumerate(self.recipe_history.actions) 
-                                     if a.order == prereq_order), -1)
-                    
-                    if prereq_idx >= 0 and not self.recipe_history.executed[prereq_idx]:
-                        prereqs_met = False
-                        break
-                
-                if prereqs_met:
-                    self.best_action = action
-                    rospy.loginfo(f"Selected next action: {action.label} (order: {action.order})")
-                    return False
-                else:
-                    rospy.logwarn(f"Action {action.label} not executable: prereqs_met={prereqs_met}")
-        
-        rospy.logwarn("No executable actions found, but recipe not finished")
-        return False
+        return random.random() < 0.9
 
 if __name__ == '__main__':
-    try:
+    rate = rospy.Rate(10)
+    while not rospy.is_shutdown():
         node = ActionPlanning()
         rospy.spin()
-    except rospy.ROSInterruptException:
-        pass

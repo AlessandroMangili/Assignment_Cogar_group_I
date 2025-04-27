@@ -2,7 +2,7 @@
 import rospy
 import random
 from std_msgs.msg import String
-from assignments.msg import RobotState
+from assignments.msg import RobotState, Recipe, RecipeHistory, OnExecutionActions
 from assignments.srv import Speaker
 
 class HumanCommandMonitoring:
@@ -15,24 +15,26 @@ class HumanCommandMonitoring:
         rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
         rospy.Subscriber('/microphone_input', String, self.audio_callback)
         rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
+        self.robot_state = RobotState()
+        self.robot_state = "No Recipe"
         
+        """used in the real architecture
         rospy.Subscriber('/recipe', Recipe, self.recipe_callback)
         rospy.Subscriber('/recipe_history', RecipeHistory, self.recipe_history_callback)
         rospy.Subscriber('/on_execution_actions', OnExecutionActions, self.on_execution_actions_callback)
+        self.recipe = Recipe()
+        self.recipe_history = RecipeHistory()
+        self.on_execution_actions = OnExecutionActions()"""
         
         rospy.wait_for_service('/speaker')
         self.speaker_client = rospy.ServiceProxy('/speaker', Speaker)
-        
-        self.robot_state = RobotState()
-        self.recipe = Recipe()
-        self.recipe_history = RecipeHistory()
-        self.on_execution_actions = OnExecutionActions()
         
         rospy.loginfo("Human Command Monitoring initialized")
     
     def robot_state_callback(self, msg):
         self.robot_state.state = msg
         
+    """used in the real architecture
     def recipe_callback(self, msg):
         self.recipe = msg
     
@@ -40,7 +42,7 @@ class HumanCommandMonitoring:
         self.recipe_history = msg
     
     def on_execution_actions_callback(self, msg):
-        self.on_execution_actions = msg
+        self.on_execution_actions = msg"""
     
     def speak(self, message):
         try:
@@ -120,13 +122,15 @@ class HumanCommandMonitoring:
     def validate_command(self, command):
         rospy.loginfo(f"Validating command: {command}")
         
-        if "invalid" in command.lower():
-            self.speak("Sorry, I can't do that")
-            return False
+        success = random.random() > 0.2
         
-        self.speak("OK")
-        self.command_pub.publish(command)
-        return True
+        if success:
+            self.speak("OK")
+            self.command_pub.publish(command)
+        else:
+            self.speak("Sorry, I can't do that")
+            
+        return success
     
     def propose_recipes(self, ingredients):
         rospy.loginfo(f"Finding recipes with: {ingredients}")
@@ -141,8 +145,7 @@ class HumanCommandMonitoring:
         return random.random() < 0.9
 
 if __name__ == '__main__':
-    try:
+    rate = rospy.Rate(10)
+    while not rospy.is_shutdown():
         node = HumanCommandMonitoring()
         rospy.spin()
-    except rospy.ROSInterruptException:
-        pass
