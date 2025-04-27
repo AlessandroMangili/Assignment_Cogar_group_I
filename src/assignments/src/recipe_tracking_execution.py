@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import rospy
 import random
-from std_msgs.msg import String, Bool
-from assignments.msg import Action, Recipe, RecipeHistory, NewRecipeHistory, OnExecutionActions
+from std_msgs.msg import String, Bool, Int32
+from assignments.msg import Action, Recipe, RecipeHistory, NewRecipeHistory, OnExecutionActions, ErrorMessage
 
 class RecipeTrackingExecution:
     def __init__(self):
@@ -12,6 +12,7 @@ class RecipeTrackingExecution:
         self.recipe_history_pub = rospy.Publisher('/recipe_history', RecipeHistory, queue_size=10)
         self.on_execution_actions_pub = rospy.Publisher('/on_execution_actions', OnExecutionActions, queue_size=10)
         self.new_recipe_history_pub = rospy.Publisher('/new_recipe_history', NewRecipeHistory, queue_size=10)
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
         
         self.initialize_recipe_history_pub = rospy.Publisher('/initialize_recipe_history', Bool, queue_size=10)
         self.update_recipe_history_pub = rospy.Publisher('/update_recipe_history', Bool, queue_size=10)
@@ -21,6 +22,7 @@ class RecipeTrackingExecution:
         rospy.Subscriber('/update_recipe_history', Bool, self.update_recipe_history)
         rospy.Subscriber('/update_on_execution_actions', Action, self.update_on_execution_actions)
         rospy.Subscriber('/command_recipe_history', String, self.command_recipe_history)
+        rospy.Subscriber('/error_message', ErrorMessage, self.error_callback)
         
         self.recipe = Recipe()
         self.recipe_history = RecipeHistory()
@@ -36,6 +38,11 @@ class RecipeTrackingExecution:
         self.dummy_action.ingredients = [1]
         
         rospy.loginfo("Recipe Tracking and Execution initialized")
+
+    def error_callback(self, msg):
+        error = msg
+        if error.id_component == 1:
+            rospy.logerr(f"Received an error from the error handler: {error}")
     
     def update_recipe(self, req):
         rospy.loginfo("Updating recipe from internet")
@@ -125,7 +132,7 @@ class RecipeTrackingExecution:
 
 if __name__ == '__main__':
     try:
-    	node = RecipeTrackingExecution()
-    	rospy.spin()
+        node = RecipeTrackingExecution()
+        rospy.spin()
     except rospy.ROSInterruptException:
         pass

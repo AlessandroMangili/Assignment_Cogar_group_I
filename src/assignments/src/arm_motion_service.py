@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import rospy
+from std_msgs.msg import String, Int32
 from assignments.srv import CheckJointState, CheckJointStateResponse
 import random
+from assignments.msg import ErrorMessage
 
 expected_joint_count = 7
 
@@ -36,8 +38,15 @@ def joint_state_service():
     rospy.init_node('joint_state_service', anonymous=True)
     # Create the service that listens for requests
     service = rospy.Service('/check_joint_state', CheckJointState, check_joint_state)
+    rospy.Subscriber('/error_message', ErrorMessage, error_callback)
+    error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
     rospy.loginfo("Joint state service is ready!")
     rospy.spin()
+
+def error_callback(msg):
+        error = msg
+        if error.id_component == 7:
+            rospy.logerr(f"Received an error from the error handler: {error}")
 
 if __name__ == '__main__':
     try:

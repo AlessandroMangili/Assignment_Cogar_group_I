@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 import rospy
 import random
-from std_msgs.msg import Float64, String
+from std_msgs.msg import Float64, String, Int32
 from geometry_msgs.msg import Point
 from assignments.srv import CheckJointState, WheelsSpeed
+from assignments.msg import ErrorMessage
 
 class SLAM:
     def __init__(self):
         rospy.loginfo("Initializing Simple SLAM component")
         self.position = {'x': 0.0, 'y': 0.0, 'z': 0.0}
         self.position_pub = rospy.Publisher('/current_position', Point, queue_size=10)
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
         rospy.Timer(rospy.Duration(10), self.update_position)
     
     def update_position(self, event=None):
@@ -36,6 +38,7 @@ class TrajectoryPlanning:
         self.wheels_client = rospy.ServiceProxy('/set_wheels_speed', WheelsSpeed)
         self.gripper_client = rospy.ServiceProxy('/check_joint_state', CheckJointState)
         self.status_pub = rospy.Publisher('/trajectory_status', String, queue_size=10)
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
         
         self.current_position = Point()
         self.target_position = Point()
@@ -61,7 +64,6 @@ class TrajectoryPlanning:
         
         rospy.loginfo(f"Setting wheel speeds: left={left_speed}, right={right_speed}")
         
-        # Call wheel service
         try:
             response = self.wheels_client(left_speed, right_speed)
             success = response.success
@@ -70,10 +72,12 @@ class TrajectoryPlanning:
                 rospy.loginfo("Successfully set wheel speeds")
             else:
                 self.status_pub.publish("FAILED")
-                rospy.logerr("Failed to set wheel speeds")
+                self.error_pub.publish(3)
+                #rospy.logerr("Failed to set wheel speeds")
             return success
         except rospy.ServiceException as e:
-            rospy.logerr(f"Service call failed: {e}")
+            self.error_pub.publish(5)
+            #rospy.logerr(f"Service call failed: {e}")
             self.status_pub.publish("ERROR")
             return False
     
@@ -95,10 +99,12 @@ class TrajectoryPlanning:
                 rospy.loginfo("Successfully moved gripper")
             else:
                 self.status_pub.publish("GRIPPER_FAILED")
-                rospy.logerr("Failed to move gripper")
+                self.error_pub.publish(6)
+                #rospy.logerr("Failed to move gripper")
             return success
         except rospy.ServiceException as e:
-            rospy.logerr(f"Service call failed: {e}")
+            self.error_pub.publish(6)
+            #rospy.logerr(f"Service call failed: {e}")
             self.status_pub.publish("GRIPPER_ERROR")
             return False
 
@@ -106,14 +112,19 @@ class TrajectoryPlanning:
 def main():
     rospy.init_node('simple_navigation_system', anonymous=True)
     rospy.loginfo("Starting Simple Navigation System")
+
+    rospy.Subscriber('/error_message', ErrorMessage, error_callback)
     
-    # Initialize components
     slam = SLAM()
     trajectory = TrajectoryPlanning() 
     
     rospy.loginfo("Simple Navigation System running")
     rospy.spin()
 
+def error_callback(msg):
+        error = msg
+        if error.id_component == 5:
+            rospy.logerr(f"Received an error from the error handler: {error}")
 
 if __name__ == '__main__':
     try:

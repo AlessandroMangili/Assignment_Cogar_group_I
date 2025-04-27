@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 import rospy
 import random
-from std_msgs.msg import String, Float64
+from std_msgs.msg import String, Float64, Int32
 from geometry_msgs.msg import Point
-from assignments.srv import Navigation, NavigationRequest
-from assignments.msg import Action, RobotState
+from assignments.msg import Action, RobotState, ErrorMessage
 
 class HighLevelAction:
     def __init__(self):
         rospy.loginfo("Initializing High Level Action")
     
         self.action_pub = rospy.Publisher('/high_level_action', String, queue_size=10)
-        
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
         rospy.Subscriber('/notify_action', Action, self.notify_action_callback)
         rospy.Subscriber('/battery_level', Float64, self.battery_callback)
         rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
@@ -48,7 +47,7 @@ class Robot_state:
         rospy.loginfo("Initializing Robot State")
     
         self.state_pub = rospy.Publisher('/robot_state', RobotState, queue_size=10)
-        
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
         rospy.Subscriber('/high_level_action', String, self.action_callback)
         
         self.current_state = RobotState(state="No Recipe")
@@ -73,7 +72,7 @@ class BatteryLevel:
         rospy.loginfo("Initializing Battery Level component")
         
         self.battery_pub = rospy.Publisher('/battery_level', Float64, queue_size=10)
-        
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
         rospy.Subscriber('/robot_state', RobotState, self.state_callback)
         
         self.current_level = 100.0
@@ -94,9 +93,7 @@ class BatteryLevel:
     
     def update_battery(self, event=None):
         self.current_level -= self.discharge_rate
-    
         self.current_level = max(0.0, min(100.0, self.current_level))
-        
         self.battery_pub.publish(self.current_level)
         
         if self.current_level < 10.0:
@@ -106,10 +103,10 @@ class BatteryLevel:
         elif self.current_level > 95.0:
             rospy.loginfo(f"Battery fully charged: {self.current_level:.1f}%")
 
-
 def main():
     rospy.init_node('planner_high_level', anonymous=True)
     rospy.loginfo("Starting Planner High Level subsystem")
+    rospy.Subscriber('/error_message', ErrorMessage, error_callback)
     
     action = HighLevelAction()
     robot_state = Robot_state()
@@ -118,6 +115,10 @@ def main():
     rospy.loginfo("Planner High Level system running")
     rospy.spin()
 
+def error_callback(msg):
+        error = msg
+        if error.id_component == 4:
+            rospy.logerr(f"Received an error from the error handler: {error}")
 
 if __name__ == '__main__':
     try:

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import rospy
 import random
-from std_msgs.msg import String, Bool
-from assignments.msg import Action, Recipe, RecipeHistory, NewRecipeHistory, OnExecutionActions, RobotState
-from assignments.srv import Speaker
+from std_msgs.msg import String, Bool, Int32
+from assignments.msg import Action, Recipe, RecipeHistory, NewRecipeHistory, OnExecutionActions, RobotState, ErrorMessage
+from assignments.srv import Speaker, SpeakerRequest
 
 class ActionPlanning:
     def __init__(self):
@@ -11,9 +11,12 @@ class ActionPlanning:
         
         self.update_on_execution_actions_pub = rospy.Publisher('/update_on_execution_actions', Action, queue_size=10)
         self.notify_action_pub = rospy.Publisher('/notify_action', Action, queue_size=10)
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
         
         rospy.Subscriber('/recipe', Recipe, self.recipe_callback)
         rospy.Subscriber('/recipe_history', RecipeHistory, self.recipe_history_callback)
+        rospy.Subscriber('/error_message', ErrorMessage, self.error_callback)
+
         self.recipe = Recipe()
         self.recipe_history = RecipeHistory()
         
@@ -33,6 +36,11 @@ class ActionPlanning:
         self.planning_timer = rospy.Timer(rospy.Duration(1), self.planning_cycle)
         
         rospy.loginfo("Action Planning initialized")
+
+    def error_callback(self, msg):
+        error = msg
+        if error.id_component == 2:
+            rospy.logerr(f"Received an error from the error handler: {error}")
     
     def speak(self, message):
         try:
@@ -42,10 +50,12 @@ class ActionPlanning:
                 rospy.sleep(1)
                 retry_response = self.speaker_client(message)
                 if not retry_response.success:
-                    rospy.logerr("Speaker service failed again")
+                    self.error_pub.publish(4)
+                    #rospy.logerr("Speaker service failed again")
             return response.success
         except rospy.ServiceException as e:
-            rospy.logerr(f"Service call failed: {e}")
+            self.error_pub.publish(4)
+            #rospy.logerr(f"Service call failed: {e}")
             return False
     
     def recipe_callback(self, msg):
@@ -74,7 +84,8 @@ class ActionPlanning:
         is_recipe_failed = self.unexpected_condition_check()
         
         if is_recipe_failed:
-            rospy.logerr("Recipe failed!")
+            self.error_pub.publish(2)
+            #rospy.logerr("Recipe failed!")
             self.speak("Recipe Failed, please provide a new recipe")
             return
         else:
@@ -105,7 +116,7 @@ class ActionPlanning:
 
 if __name__ == '__main__':
     try:
-    	node = ActionPlanning()
-    	rospy.spin()
+        node = ActionPlanning()
+        rospy.spin()
     except rospy.ROSInterruptException:
         pass

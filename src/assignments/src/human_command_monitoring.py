@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import rospy
 import random
-from std_msgs.msg import String
-from assignments.msg import RobotState, Recipe, RecipeHistory, OnExecutionActions
+from std_msgs.msg import String, Int32
+from assignments.msg import RobotState, Recipe, RecipeHistory, OnExecutionActions, ErrorMessage
 from assignments.srv import Speaker
 
 class HumanCommandMonitoring:
@@ -14,6 +14,9 @@ class HumanCommandMonitoring:
         
         rospy.Subscriber('/microphone_input', String, self.audio_callback)
         rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
+        rospy.Subscriber('/error_message', ErrorMessage, self.error_callback)
+        self.error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
+        
         self.robot_state = RobotState()
         self.robot_state = "No Recipe"
         
@@ -48,6 +51,12 @@ class HumanCommandMonitoring:
     def on_execution_actions_callback(self, msg):
         self.on_execution_actions = msg"""
     
+    def error_callback(self, msg):
+        error = msg
+        if error.id_component == 3:
+            rospy.logerr(f"Received an error from the error handler: {error}")
+        
+    
     def speak(self, message):
         try:
             response = self.speaker_client(message)
@@ -56,10 +65,12 @@ class HumanCommandMonitoring:
                 rospy.sleep(1)
                 retry_response = self.speaker_client(message)
                 if not retry_response.success:
-                    rospy.logerr("Speaker service failed again")
+                    self.error_pub.publish(4)
+                    #rospy.logerr("Speaker service failed again")
             return response.success
         except rospy.ServiceException as e:
-            rospy.logerr(f"Service call failed: {e}")
+            self.error_pub.publish(4)
+            #rospy.logerr(f"Service call failed: {e}")
             return False
     
     def generate_random_input(self, event):
@@ -67,24 +78,24 @@ class HumanCommandMonitoring:
         
         if self.robot_state == "No Recipe":
             if input_type == "recipe":
-            	recipe_name = random.choice(self.possible_recipes)
-            	simulated_input = f"recipe {recipe_name}"
-            	rospy.loginfo(f"Simulated voice input: {simulated_input}")
+                recipe_name = random.choice(self.possible_recipes)
+                simulated_input = f"recipe {recipe_name}"
+                rospy.loginfo(f"Simulated voice input: {simulated_input}")
             
-            	msg = String()
-            	msg.data = simulated_input
-            	self.audio_callback(msg)
+                msg = String()
+                msg.data = simulated_input
+                self.audio_callback(msg)
             
             elif input_type == "ingredients":
-            	num_ingredients = random.randint(1, 3)
-            	selected_ingredients = random.sample(self.possible_ingredients, num_ingredients)
-            	ingredients_str = " ".join(selected_ingredients)
-            	simulated_input = f"ingredients {ingredients_str}"
-            	rospy.loginfo(f"Simulated voice input: {simulated_input}")
+                num_ingredients = random.randint(1, 3)
+                selected_ingredients = random.sample(self.possible_ingredients, num_ingredients)
+                ingredients_str = " ".join(selected_ingredients)
+                simulated_input = f"ingredients {ingredients_str}"
+                rospy.loginfo(f"Simulated voice input: {simulated_input}")
             
-            	msg = String()
-            	msg.data = simulated_input
-            	self.audio_callback(msg)
+                msg = String()
+                msg.data = simulated_input
+                self.audio_callback(msg)
         elif input_type == "command":
             commands = ["next step", "repeat", "previous step", "pause", "continue", "stop"]
             command = random.choice(commands)

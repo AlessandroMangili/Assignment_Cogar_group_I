@@ -56,6 +56,7 @@ add_message_files(
   RecipeHistory.msg
   NewRecipeHistory.msg
   OnExecutionActions.msg
+  ErrorMessage.msg
 )
 
 ## Generate services in the 'srv' folder

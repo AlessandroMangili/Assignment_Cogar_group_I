@@ -2,14 +2,13 @@
 import rospy
 from assignments.srv import WheelsSpeed, WheelsSpeedResponse
 import random
+from std_msgs.msg import String, Int32
+from assignments.msg import ErrorMessage
 
 max_wheel_speed = 10.0
 min_wheel_speed = -10.0
 
 def set_wheels_speed(req):
-    """
-    Service callback that set the speeds provided to the wheels.
-    """
     rospy.loginfo("Received speeds for the wheels.")
     num = random.randint(1, 100)
     
@@ -18,11 +17,10 @@ def set_wheels_speed(req):
         rospy.sleep(5)
         return WheelsSpeedResponse(False)
 
-    # Check if the dimensions of positions, velocities, and efforts match the expected joint count
     if (req.left_speed >= -min_wheel_speed or req.left_speed  <= max_wheel_speed)  and \
        (req.right_speed >= -min_wheel_speed or req.right_speed  <= max_wheel_speed):
         rospy.loginfo("Speeds have been setted to the wheels.")
-        rospy.sleep(5)
+        rospy.sleep(1)
         rospy.loginfo("The robot moved!")
         return WheelsSpeedResponse(True)
     else:
@@ -30,14 +28,17 @@ def set_wheels_speed(req):
         return WheelsSpeedResponse(False)
 
 def wheels_speed_service():
-    """
-    Initializes the ROS service server that set the wheels speed
-    """
     rospy.init_node('wheels_speed_service', anonymous=True)
-    # Create the service that listens for requests
     service = rospy.Service('/set_wheels_speed', WheelsSpeed, set_wheels_speed)
+    rospy.Subscriber('/error_message', ErrorMessage, error_callback)
+    error_pub = rospy.Publisher('/error_code', Int32,  queue_size=10)
     rospy.loginfo("Wheels speed service is ready!")
     rospy.spin()
+
+def error_callback(msg):
+        error = msg
+        if error.id_component == 6:
+            rospy.logerr(f"Received an error from the error handler: {error}")
 
 if __name__ == '__main__':
     try:
