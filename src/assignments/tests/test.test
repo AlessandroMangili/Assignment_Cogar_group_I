@@ -1,0 +1,14 @@
+<launch>
+  <node name="action_planning" pkg="assignments" type="action_planning.py" output="screen"/>
+  <node name="human_command_monitoring" pkg="assignments" type="human_command_monitoring.py" output="screen"/>
+  <node name="navigation" pkg="assignments" type="navigation.py" output="screen"/>
+  <node name="planner_high_level" pkg="assignments" type="planner.py" output="screen"/>
+  <node name="recipe_tracking_execution" pkg="assignments" type="recipe_tracking_execution.py" output="screen"/>
+  <node name="error_handler" pkg="assignments" type="error_handler_procedure_component.py" output="screen"/>
+  <node name="perception_procedure" pkg="assignments" type="perception_procedure.py" output="screen"/>
+  <node name="arm_motion_service" pkg="assignments" type="arm_motion_service.py" output="screen"/>
+  <node name="wheels_speed_service" pkg="assignments" type="wheels_speed_service.py" output="screen"/>
+  <node name="speaker_service" pkg="assignments" type="speaker_service.py" output="screen"/>
+  
+  <test test-name="integration_test" pkg="assignments" type="test.py"/>
+</launch>
