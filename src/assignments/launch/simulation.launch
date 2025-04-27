@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="assignments" type="speaker_service.py" name="speaker_service"/>
+    <node pkg="assignments" type="perception_procedure.py" name="perception_procedure" output="screen"/>
+    <node pkg="assignments" type="human_command_monitoring.py" name="human_command_monitoring" output="screen"/>
+    <node pkg="assignments" type="recipe_tracking_execution.py" name="recipe_tracking_execution" output="screen"/>
+    <node pkg="assignments" type="action_planning.py" name="action_planning" output="screen"/>
+    <node pkg="assignments" type="planner.py" name="planner" output="screen"/>
+    <node pkg="assignments" type="navigation.py" name="navigation" output="screen"/>
+    <node pkg="assignments" type="wheels_speed_service.py" name="wheels_speed_service" output="screen"/>
+    <node pkg="assignments" type="arm_motion_service.py" name="arm_motion_service" output="screen"/>
+    <!--<node pkg="assignments" type="error_handler_procedure_component.py" name="error_handler" output="screen"/>-->
+</launch>
