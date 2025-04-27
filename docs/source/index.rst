@@ -50,5 +50,4 @@ Mandatory Components
 
     Components <components.rst>
     Behevioural <behavioural.rst>
-    Interfaces <interfaces.rst>
-    Testing and KPIs <testing.rst>
+    KPIs <testing.rst>
