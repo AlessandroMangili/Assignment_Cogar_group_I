@@ -12,13 +12,13 @@ class HumanCommandMonitoring:
         self.update_recipe_pub = rospy.Publisher('/update_recipe', String, queue_size=10)
         self.command_pub = rospy.Publisher('/command_recipe_history', String, queue_size=10)
         
-        rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
         rospy.Subscriber('/microphone_input', String, self.audio_callback)
         rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
         self.robot_state = RobotState()
         self.robot_state = "No Recipe"
         
         """used in the real architecture
+        rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
         rospy.Subscriber('/recipe', Recipe, self.recipe_callback)
         rospy.Subscriber('/recipe_history', RecipeHistory, self.recipe_history_callback)
         rospy.Subscriber('/on_execution_actions', OnExecutionActions, self.on_execution_actions_callback)
@@ -35,10 +35,10 @@ class HumanCommandMonitoring:
         
         rospy.loginfo("Human Command Monitoring initialized")
     
+    """used in the real architecture
     def robot_state_callback(self, msg):
         self.robot_state = msg
         
-    """used in the real architecture
     def recipe_callback(self, msg):
         self.recipe = msg
     

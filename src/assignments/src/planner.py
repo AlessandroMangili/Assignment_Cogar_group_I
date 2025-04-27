@@ -12,7 +12,7 @@ class HighLevelAction:
     
         self.action_pub = rospy.Publisher('/high_level_action', String, queue_size=10)
         
-        rospy.Subscriber('/notify_action', String, self.notify_action_callback)
+        rospy.Subscriber('/notify_action', Action, self.notify_action_callback)
         rospy.Subscriber('/battery_level', Float64, self.battery_callback)
         rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
         
@@ -21,29 +21,27 @@ class HighLevelAction:
         self.current_state = ""
     
     def notify_action_callback(self, data):
-        self.current_best_action = data.data
-        
-        if self.robot_state in ["Grubbing", "Cutting"]:
-            rospy.loginfo("Robot is busy, not generating new action")
+        self.current_best_action = data.label
+
+        if self.current_best_action == "":
             return
         
-        if self.battery_level < 20.0:
+        if self.battery_level < 50.0:
             action = "RETURN_TO_CHARGING_STATION"
             rospy.loginfo("Battery low, sending robot to charging station")
         else:
-            action = self.current_best_action
+            action = "Wheels" if random.random() < 0.5 else "Gripper"
             rospy.loginfo(f"Using best action: {action}")
         
         self.action_pub.publish(action)
         rospy.loginfo(f"Published high-level action: {action}")
-        rospy.loginfo(f"High Level Action received best action: {self.current_best_action}")
     
     def battery_callback(self, data):
         self.battery_level = data.data
         rospy.loginfo(f"High Level Action received battery level: {self.battery_level:.1f}%")
     
     def robot_state_callback(self, data):
-        self.current_state = data.state
+        self.current_state = data
 
 class Robot_state:
     def __init__(self):
@@ -53,7 +51,7 @@ class Robot_state:
         
         rospy.Subscriber('/high_level_action', String, self.action_callback)
         
-        self.current_state = RobotState("No Recipe")
+        self.current_state = RobotState(state="No Recipe")
         self.last_action = ""
         
         rospy.Timer(rospy.Duration(1.0), self.publish_state)
@@ -67,7 +65,7 @@ class Robot_state:
 
         rospy.loginfo(f"Robot state updated to {self.current_state} based on action: {self.last_action}")
     
-    def publish_state(self, event=None):        
+    def publish_state(self, event=None):
         self.state_pub.publish(self.current_state)
 
 class BatteryLevel:
@@ -76,15 +74,15 @@ class BatteryLevel:
         
         self.battery_pub = rospy.Publisher('/battery_level', Float64, queue_size=10)
         
-        rospy.Subscriber('/robot_state', String, self.state_callback)
+        rospy.Subscriber('/robot_state', RobotState, self.state_callback)
         
         self.current_level = 100.0
         self.discharge_rate = 0.1  # % per second
         
-        rospy.Timer(rospy.Duration(1.0), self.update_battery)
+        rospy.Timer(rospy.Duration(10), self.update_battery)
     
     def state_callback(self, data):
-        state = data.data
+        state = data
         if state == "Grubbing":
             self.discharge_rate = 0.3
         elif state == "Cutting":
@@ -108,65 +106,14 @@ class BatteryLevel:
         elif self.current_level > 95.0:
             rospy.loginfo(f"Battery fully charged: {self.current_level:.1f}%")
 
-class PlannerHighLevel:
-    def __init__(self):
-        rospy.loginfo("Initializing Planner High Level subsystem")
-        
-        rospy.Subscriber('/high_level_action', String, self.action_callback)
-        
-        self.nav_client = rospy.ServiceProxy('/move_to_point', Navigation)
-        
-        self.high_level_action = HighLevelAction()
-        self.robot_state = Robot_state()
-        self.battery_level = BatteryLevel()
-    
-    def action_callback(self, data):
-        action = data.data
-        self.execute_navigation()
-        rospy.loginfo(f"Planner received high-level action: {action}")
-    
-    
-    def execute_navigation(self, event=None):
-        current_state = None
-        try:
-            state_msg = rospy.wait_for_message('/robot_state', RobotState, timeout=1.0)
-            current_state = state_msg.data
-        except rospy.ROSException:
-            rospy.logerr("Timeout waiting for robot state")
-            return
-        
-        # Don't execute if robot is busy
-        if current_state in ["Grubbing", "Cutting"]:
-            rospy.loginfo("Robot is busy, not sending navigation commands")
-            return
-        
-        # Generate random coordinates for navigation
-        x = random.uniform(-10.0, 10.0)
-        y = random.uniform(-10.0, 10.0)
-        z = 0.0
-        
-        rospy.loginfo(f"Sending navigation request to coordinates: ({x:.2f}, {y:.2f}, {z:.2f})")
-        
-        # Call navigation service
-        try:
-            nav_req = NavigationRequest()
-            nav_req.x = x
-            nav_req.y = y
-            nav_req.z = z
-            response = self.nav_client(nav_req)
-            
-            if response.success:
-                rospy.loginfo("Navigation request successful")
-            else:
-                rospy.logwarn("Navigation request failed")
-        except rospy.ServiceException as e:
-            rospy.logerr(f"Navigation service call failed: {e}")
 
 def main():
     rospy.init_node('planner_high_level', anonymous=True)
     rospy.loginfo("Starting Planner High Level subsystem")
     
-    planner = PlannerHighLevel()
+    action = HighLevelAction()
+    robot_state = Robot_state()
+    battery_level = BatteryLevel()
     
     rospy.loginfo("Planner High Level system running")
     rospy.spin()

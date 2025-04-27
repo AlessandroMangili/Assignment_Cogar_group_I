@@ -23,11 +23,7 @@ class PerceptionSubsystem:
 
    
 
-    def run_loop(self, event):
-        
-        if not self.active:
-            return
-            
+    def run_loop(self, event):        
         
         rgb_msg = Image()
         depth_msg = PointCloud2()

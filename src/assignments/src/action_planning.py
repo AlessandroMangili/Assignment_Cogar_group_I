@@ -94,17 +94,13 @@ class ActionPlanning:
     
     def update_best_action(self):
         rospy.loginfo("Updating best action")
-        self.best_action = None
+        self.best_action = Action()
         
-        if not self.recipe_history:
+        if not self.recipe_history.actions:
             return False
-        
-        if self.recipe_history and isinstance(self.recipe_history.executed, list) and all(self.recipe_history.executed):
-            rospy.loginfo("All actions executed")
-            return True
-        else:
-            self.best_action = self.recipe_history.actions[0]
-        
+            
+        self.best_action = self.recipe_history.actions[0]
+					
         return random.random() < 0.1
 
 if __name__ == '__main__':
