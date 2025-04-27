@@ -25,6 +25,10 @@ class ActionPlanning:
         self.planning_timer = rospy.Timer(rospy.Duration(0.1), self.planning_cycle)
         
         self.best_action = Action()
+        self.robot_state = RobotState()
+        self.recipe = Recipe()
+        self.recipe_history = RecipeHistory()
+        self.on_execution_actions = OnExecutionActions()
         
         rospy.loginfo("Action Planning initialized")
     
@@ -86,7 +90,9 @@ class ActionPlanning:
         if None in [self.object_tracking_data]:
             return False
         
-        if len(self.on_execution_actions.actions) > 0:
+        return random.random() < 0.9
+        
+        """if len(self.on_execution_actions.actions) > 0:
             for idx, current_action in enumerate(self.on_execution_actions.actions):
                 if self.on_execution_actions.in_execution[idx]:
                     for prereq_order in current_action.prerequisites:
@@ -126,7 +132,7 @@ class ActionPlanning:
         return False
     
     def get_ingredient_name(self, ingredient_id):
-        return f"ingredient_{ingredient_id}"
+        return f"ingredient_{ingredient_id}" """
     
     def update_best_action(self):
         rospy.loginfo("Updating best action")
@@ -136,7 +142,7 @@ class ActionPlanning:
             return False
         
         if self.recipe_history and all(self.recipe_history.executed):
-            rospy.loginfo("All actions executed!")
+            rospy.loginfo("All actions executed")
             return True
         
         if self.on_execution_actions and any(self.on_execution_actions.in_execution):

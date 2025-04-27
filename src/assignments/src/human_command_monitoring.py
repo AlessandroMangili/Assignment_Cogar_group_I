@@ -16,15 +16,31 @@ class HumanCommandMonitoring:
         rospy.Subscriber('/microphone_input', String, self.audio_callback)
         rospy.Subscriber('/object_tracking', String, self.object_tracking_callback)
         
+        rospy.Subscriber('/recipe', Recipe, self.recipe_callback)
+        rospy.Subscriber('/recipe_history', RecipeHistory, self.recipe_history_callback)
+        rospy.Subscriber('/on_execution_actions', OnExecutionActions, self.on_execution_actions_callback)
+        
         rospy.wait_for_service('/speaker')
         self.speaker_client = rospy.ServiceProxy('/speaker', Speaker)
         
         self.robot_state = RobotState()
+        self.recipe = Recipe()
+        self.recipe_history = RecipeHistory()
+        self.on_execution_actions = OnExecutionActions()
         
         rospy.loginfo("Human Command Monitoring initialized")
     
     def robot_state_callback(self, msg):
         self.robot_state.state = msg
+        
+    def recipe_callback(self, msg):
+        self.recipe = msg
+    
+    def recipe_history_callback(self, msg):
+        self.recipe_history = msg
+    
+    def on_execution_actions_callback(self, msg):
+        self.on_execution_actions = msg
     
     def speak(self, message):
         try:
