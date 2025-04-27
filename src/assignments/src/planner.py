@@ -4,7 +4,7 @@ import random
 from std_msgs.msg import String, Float64
 from geometry_msgs.msg import Point
 from assignments.srv import Navigation, NavigationRequest
-from assignments.msg import Action
+from assignments.msg import Action, RobotState
 
 class HighLevelAction:
     def __init__(self):
@@ -14,11 +14,11 @@ class HighLevelAction:
         
         rospy.Subscriber('/notify_action', String, self.notify_action_callback)
         rospy.Subscriber('/battery_level', Float64, self.battery_callback)
-        rospy.Subscriber('/robot_state', String, self.robot_state_callback)
+        rospy.Subscriber('/robot_state', RobotState, self.robot_state_callback)
         
-        self.current_best_action = ""
+        self.current_best_action = Action()
         self.battery_level = 100.0
-        self.robot_state = "No Recipe"
+        self.current_state = ""
     
     def notify_action_callback(self, data):
         self.current_best_action = data.data
@@ -43,18 +43,17 @@ class HighLevelAction:
         rospy.loginfo(f"High Level Action received battery level: {self.battery_level:.1f}%")
     
     def robot_state_callback(self, data):
-        self.robot_state = data.data
-        rospy.loginfo(f"High Level Action received robot state: {self.robot_state}")
+        self.current_state = data.state
 
-class RobotState:
+class Robot_state:
     def __init__(self):
         rospy.loginfo("Initializing Robot State")
     
-        self.state_pub = rospy.Publisher('/robot_state', String, queue_size=10)
+        self.state_pub = rospy.Publisher('/robot_state', RobotState, queue_size=10)
         
         rospy.Subscriber('/high_level_action', String, self.action_callback)
         
-        self.current_state = "no Recipe"
+        self.current_state = RobotState("No Recipe")
         self.last_action = ""
         
         rospy.Timer(rospy.Duration(1.0), self.publish_state)
@@ -118,7 +117,7 @@ class PlannerHighLevel:
         self.nav_client = rospy.ServiceProxy('/move_to_point', Navigation)
         
         self.high_level_action = HighLevelAction()
-        self.robot_state = RobotState()
+        self.robot_state = Robot_state()
         self.battery_level = BatteryLevel()
     
     def action_callback(self, data):
@@ -130,7 +129,7 @@ class PlannerHighLevel:
     def execute_navigation(self, event=None):
         current_state = None
         try:
-            state_msg = rospy.wait_for_message('/robot_state', String, timeout=1.0)
+            state_msg = rospy.wait_for_message('/robot_state', RobotState, timeout=1.0)
             current_state = state_msg.data
         except rospy.ROSException:
             rospy.logerr("Timeout waiting for robot state")
