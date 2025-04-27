@@ -12,7 +12,7 @@ The **planner high level** component is responsible for translating the actions 
 
 Additionally, there is an artifact that keeps track of the **robot's current state** for example, states like cutting, cooking, grabbing, and so on. The robot's state dynamically updates according to the current situation.
 
-Finally, there is a component that monitors the robot’s **battery level**. This component is responsible for managing the charge status and will send a vocal warning signal when the battery is running low.
+Finally, there is a component that monitors the robot’s **battery level**. This component is responsible for managing the charge status and the :doc:`error handler <error_handler>` will send a vocal warning signal when the battery is running low.
 
 As we can observe, there are two ports that are not connected to any internal component, as these serve as the input and output for the :doc:`error handler <error_handler>` component, which will manage any recovery procedures.
 

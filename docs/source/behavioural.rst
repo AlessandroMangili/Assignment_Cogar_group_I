@@ -139,7 +139,7 @@ In parallel to this execution there is the "Command Recipe History" component, t
 Action Planning Based on Cooking State and Task History
 -------------------------------------------------------
 
-Every 10 ms tick the planner is triggered to begin a new cycle.
+Every 100 ms tick the planner is triggered to begin a new cycle.
 At the start of the cycle, it reads the latest values from the always-on channels C (Recipe History data), D (On Execution Actions data) and F (Object tracking data).
 It immediately performs an "Unexpected Condition Check", that will check for unexpected condition caused by the human agent (seen with the object tracking), that can affect the recipe history or the action to execute.
 It then evaluates if isRecipeFailed?
